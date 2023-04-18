@@ -1,6 +1,13 @@
-import {downloadVideo} from "./utils";
+import {download} from "./utils";
+
+const url1 = "https://www.youtube.com/shorts/TX0oX0CNmeY";
+
+const url2 = "https://www.youtube.com/watch?v=9i_2XGb28Pg&t=1s";
+
+async function appStart() {
+    download(url1)
+}
+
+appStart();
 
 
-const url = "https://www.youtube.com/shorts/I_r5em61Rqs";
-const fileName = '001.mp4'
-downloadVideo(url, fileName);

@@ -2,13 +2,13 @@
   "scripts": {
     "dev": "tsc && node ./temp"
   },
+  "type": "commonjs",
   "dependencies": {
-    "https-proxy-agent": "^5.0.1",
-    "readline": "^1.3.0",
-    "typescript": "^5.0.4",
-    "ytdl-core": "^4.11.4"
+    "chalk": "4.x",
+    "yt-dlp-wrap": "^2.3.11"
   },
   "devDependencies": {
-    "@types/node": "^18.15.11"
+    "@types/node": "^18.15.11",
+    "typescript": "^5.0.4"
   }
 }
