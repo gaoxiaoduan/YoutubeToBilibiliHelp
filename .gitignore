@@ -3,3 +3,4 @@ node_modules
 temp
 videos
 ytdl-log.txt
+puppeteer

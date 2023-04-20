@@ -7,3 +7,5 @@ export {mkdir} from './mkdir'
 export {processVideo} from './processVideo'
 
 export {upload} from './upload'
+
+export {processThumbnail} from './processThumbnail'

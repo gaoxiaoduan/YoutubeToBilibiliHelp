@@ -10,7 +10,7 @@ function downloadVideoOrSubs(videoURL: string, dirPath: string, filename: string
         let commends = [`${videoURL}`, '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4', '--write-thumbnail', '-o', `${dirPath}/${filename}.%(ext)s`];
         if (isDownSubs) {
             // 下载字幕 '--write-sub', zh-CN,
-            commends = [`${videoURL}`, '--write-auto-sub', '--sub-lang', 'en,zh-Hans', '--sub-format', 'vtt', '--skip-download', '-o', `${dirPath}/${filename}.%(ext)s`];
+            commends = [`${videoURL}`, '--write-auto-sub', '--write-sub', '--sub-lang', 'en,zh-Hans,zh-Hans-en', '--sub-format', 'vtt', '--skip-download', '-o', `${dirPath}/${filename}.%(ext)s`];
         }
 
         const content = isDownSubs ? '字幕' : '视频';
@@ -33,6 +33,8 @@ function downloadVideoOrSubs(videoURL: string, dirPath: string, filename: string
 }
 
 export const download = async (videoUrl: string, filename: string, isDownSubs: boolean = false) => {
+    const process = isDownSubs ? "字幕" : "视频";
+    warn(`-----${process}阶段开始-----\n`)
     log("videoURL", videoUrl);
 
     const metadata = await ytdl.getVideoInfo(videoUrl);
@@ -54,6 +56,6 @@ export const download = async (videoUrl: string, filename: string, isDownSubs: b
         error("视频下载过程中出错：", e)
         return;
     }
-
+    warn(`-----${process}阶段结束-----\n`)
     return metadata;
 }
