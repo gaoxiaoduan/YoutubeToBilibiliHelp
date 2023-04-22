@@ -6,6 +6,7 @@
   "dependencies": {
     "bing-translate-api": "^2.9.0",
     "chalk": "4.x",
+    "dotenv": "^16.0.3",
     "puppeteer": "^19.9.1",
     "yt-dlp-wrap": "^2.3.11"
   },

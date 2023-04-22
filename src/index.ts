@@ -1,42 +1,56 @@
-import {download, error, processThumbnail, processVideo, upload} from "./utils";
+import {download, error, executeTasksInOrder, log, processThumbnail, processVideo, upload} from "./utils";
+import {IChangedInfo, listening} from "./listening";
+import * as dotenv from 'dotenv'
 
-const url1 = "https://www.youtube.com/shorts/TX0oX0CNmeY";
+dotenv.config();
 
-const url2 = "https://www.youtube.com/watch?v=9i_2XGb28Pg&t=1s";
+const downloadVideoJob = async (changedInfo: IChangedInfo) => {
+    await download(changedInfo, true);
+    await download(changedInfo);
+}
 
-const url3 = "https://www.youtube.com/watch?v=Wty2UwGsgf4";
+const processThumbnailJob = async (changedInfo: IChangedInfo) => {
+    // 将webp格式的封面修改为png格式
+    const {video_info} = changedInfo
+    const processThumbnailResult = await processThumbnail(video_info.dirPath, video_info.filename);
+    if (!processThumbnailResult) return error('封面格式转换失败');
+}
 
-const url4 = "https://www.youtube.com/watch?v=_k-kxGCOI9U";
+const processVideoJob = async (changedInfo: IChangedInfo) => {
+    const {video_info} = changedInfo
+    // 给视频加字幕
+    const precessResult = await processVideo(video_info.dirPath, video_info.filename);
+    if (!precessResult) return error("视频处理未成功");
+}
 
-const url5 = "https://www.youtube.com/watch?v=RoyHvfJowZI";
+const uploadJob = async (changedInfo: IChangedInfo) => {
+    // 开始自动上传
+    await upload(changedInfo);
+}
 
-const filename = '666';
-
-async function appStart() {
+async function main() {
     try {
-        await download(url5, filename, true);
-        const metadata = await download(url5, filename);
-        if (!(metadata.dirPath || metadata.title)) {
-            return error('没有获取到下载后的视频地址和标题')
-        }
-        // console.log(dirPath, title, 111)
+        // 开始监听任务
+        const changedInfo = await listening();
 
-        // 将webp格式的封面修改为png格式
-        const processThumbnailResult = await processThumbnail(metadata.dirPath, metadata.filename);
-        if (!processThumbnailResult) return error('封面格式转换失败');
+        const jobs = [
+            downloadVideoJob.bind(null, changedInfo),
+            processThumbnailJob.bind(null, changedInfo),
+            processVideoJob.bind(null, changedInfo),
+            uploadJob.bind(null, changedInfo),
+        ];
 
-        // 给视频加字幕
-        const precessResult = await processVideo(metadata.dirPath, metadata.filename);
-        if (!precessResult) return error("视频处理未成功");
+        await executeTasksInOrder(jobs);
 
-        // 开始自动上传
-        await upload(metadata);
+        // 执行完毕,继续新一轮监听任务
+        log("5分钟后执行下一轮监听")
+        setInterval(main, 1000 * 60 * 5);
     } catch (e) {
         error(e)
     }
 
 }
 
-appStart();
+main();
 
 

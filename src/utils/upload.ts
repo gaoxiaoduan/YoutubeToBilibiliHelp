@@ -3,17 +3,14 @@ import path from "path";
 import {log, warn} from "./log";
 import {puppeteerUserDataDir} from "../constant";
 import {information, login, uploadFile, uploadThumbnail} from "../browser/blibli";
-import {translate} from 'bing-translate-api'
+import {IChangedInfo} from "../listening";
 
-export const upload = async (metadata: any) => {
+export const upload = async (changedInfo: IChangedInfo) => {
     warn('-----自动上传阶段开始-----\n');
-    const {dirPath, filename, title} = metadata;
+    const {dirPath, filename, title, uploadTitle} = changedInfo.video_info;
     log("dirPath:", dirPath);
     log('filename', filename)
     log("title:", title)
-
-    const translationTitle = await translate(title, null, 'zh-Hans');
-    const uploadTitle = '【科普英语动画】' + translationTitle.translation?.slice(0, 80) || title || '文件名出问题啦～';
 
     const outputFile = path.resolve(dirPath, filename + '.output.mp4')
     const outputThumbnail = path.resolve(dirPath, filename + '.png')
@@ -49,7 +46,6 @@ export const upload = async (metadata: any) => {
 
     // 填写信息
     await information(page, uploadTitle)
-
 
     // 关闭浏览器
     await browser.close();

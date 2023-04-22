@@ -1,5 +1,6 @@
 import type {Page} from "puppeteer";
 import {error, log} from "../../utils";
+import {waitForSelectorTimeout} from "../../constant";
 
 export const uploadFile = async (page: Page, outputFile: string) => {
     const nav_upload_btn = await page.$("#nav_upload_btn");
@@ -23,7 +24,7 @@ export const uploadFile = async (page: Page, outputFile: string) => {
     log('文件选择成功：', outputFile)
 
     // 等待上传成功，再填信息
-    const success = await page.waitForSelector(".success");
+    const success = await page.waitForSelector(".success", {timeout: waitForSelectorTimeout});
     if (!success) return error('未能上传成功')
 
     log('文件上传成功，开始填写信息')

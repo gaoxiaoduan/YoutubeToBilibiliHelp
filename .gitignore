@@ -2,5 +2,7 @@
 node_modules
 temp
 videos
+.env
 ytdl-log.txt
 puppeteer
+upload_log.json

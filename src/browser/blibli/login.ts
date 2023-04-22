@@ -1,6 +1,7 @@
-import {puppeteerScreenshotDir} from "../../constant";
 import {log, warn} from "../../utils";
 import type {Page} from "puppeteer";
+
+const {BliBli_USERNAME, BliBli_PASSWORD} = process.env;
 
 export const login = async (page: Page) => {
     await page.goto('https://member.bilibili.com/platform/home');
@@ -9,9 +10,8 @@ export const login = async (page: Page) => {
 
     if (page.url() === 'https://passport.bilibili.com/login') {
         log('开始登录');
-        // TODO:账号密码需要单独配置文件
-        await page.type("input[placeholder=\"请输入账号\"]", 'xxx', {delay: 50})
-        await page.type("input[placeholder=\"请输入密码\"]", 'xxx.', {delay: 50})
+        await page.type("input[placeholder=\"请输入账号\"]", `${BliBli_USERNAME}`, {delay: 50})
+        await page.type("input[placeholder=\"请输入密码\"]", `${BliBli_PASSWORD}`, {delay: 50})
         // await page.screenshot({path: puppeteerScreenshotDir + '2_login.png'})
 
         const loginBtn = await page.waitForSelector(".btn_wp > .btn_primary");

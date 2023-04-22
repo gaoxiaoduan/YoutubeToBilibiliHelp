@@ -1,6 +1,7 @@
 import * as path from "path";
 import {execCommand} from "./execCommand";
-import {log, warn} from "./log";
+import {error, log, warn} from "./log";
+import * as fs from "fs";
 
 // 给视频加字幕
 export const processVideo = (dirPath: string, filename: string) => {
@@ -12,8 +13,9 @@ export const processVideo = (dirPath: string, filename: string) => {
         const enSubtitle = path.resolve(dirPath, filename + '.en.vtt')
         // const zhSubtitle = path.resolve(dirPath, filename + '.zh-Hans.vtt');
         const zhSubtitle = path.resolve(dirPath, filename + '.zh-Hans-en.vtt');
-        // TODO:文件不存在的判断
 
+        if (fs.existsSync(enSubtitle)) return error(`${enSubtitle}不存在`);
+        if (fs.existsSync(zhSubtitle)) return error(`${enSubtitle}不存在`);
         const enStyle = 'FontSize=14,PrimaryColour=&H80ffff&,MarginV=30';
         const zhStyle = 'FontSize=14,PrimaryColour=&H80ffff&,MarginV=0';
 
