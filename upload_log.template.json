@@ -1,0 +1,43 @@
+{
+  "supported_target_platform": [
+    "BZ"
+  ],
+  "uploads": [
+    {
+      "user": "user1",
+      "user_url": "https://www.youtube.com/@user1/videos",
+      "publish_prefix": "【xxx】",
+      "videos": [
+        {
+          "id": "xxx",
+          "video_url": "https://www.youtube.com/watch?v=xxx",
+          "title": "xxx",
+          "uploader": "xxx",
+          "upload_date": "xxx",
+          "dirPath": "xxx",
+          "filename": "xxx",
+          "uploadTitle": "xxx",
+          "published": []
+        }
+      ]
+    },
+    {
+      "user": "user2",
+      "user_url": "https://www.youtube.com/@user2/videos",
+      "publish_prefix": "【xxx】",
+      "videos": [
+        {
+          "id": "xxx",
+          "video_url": "https://www.youtube.com/watch?v=xxx",
+          "title": "xxx",
+          "uploader": "xxx",
+          "upload_date": "xxx",
+          "dirPath": "xxx",
+          "filename": "xxx",
+          "uploadTitle": "xxx",
+          "published": []
+        }
+      ]
+    }
+  ]
+}
