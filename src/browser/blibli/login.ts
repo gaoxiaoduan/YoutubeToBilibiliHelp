@@ -1,7 +1,17 @@
 import {log, warn} from "../../utils";
 import type {Page} from "puppeteer";
+import * as fs from "fs";
+import path from "path";
+
+const cookiePath = path.resolve(__dirname, '../../../cookies.txt')
 
 export const login = async (page: Page) => {
+    const lastCookieString = fs.readFileSync(cookiePath);
+    if (lastCookieString.length !== 0) {
+        const cookies = JSON.parse(lastCookieString.toString());
+        await page.setCookie(...cookies)
+    }
+
     await page.goto('https://member.bilibili.com/platform/home');
     // await page.screenshot({path: puppeteerScreenshotDir + '1_login.png'})
 
@@ -29,6 +39,11 @@ export const login = async (page: Page) => {
             }
         }
     }
+
+    const cookies = await page.cookies();
+    const cookiesString = JSON.stringify(cookies);
+
+    fs.writeFileSync(cookiePath, cookiesString);
     log('成功进入创作中心')
     // await page.screenshot({path: puppeteerScreenshotDir + '3_login.png'})
 }

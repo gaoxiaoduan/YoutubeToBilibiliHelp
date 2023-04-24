@@ -20,7 +20,8 @@ export const upload = async (changedInfo: IChangedInfo) => {
 
     warn('启动浏览器...\n')
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
+        args: ['--no-sandbox'],
         slowMo: 250,
         userDataDir: puppeteerUserDataDir
     });
