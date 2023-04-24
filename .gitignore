@@ -1,7 +1,8 @@
 .idea
 node_modules
 temp
-videos
+videos/**
+logs/**
 .env
 ytdl-log.txt
 puppeteer

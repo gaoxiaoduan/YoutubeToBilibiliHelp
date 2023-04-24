@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "dev": "rm -rf ./tmp && tsc && node ./temp"
+    "dev": "rm -rf ./temp && tsc && node ./temp",
+    "build": "rm -rf ./temp && tsc"
   },
   "type": "commonjs",
   "dependencies": {
