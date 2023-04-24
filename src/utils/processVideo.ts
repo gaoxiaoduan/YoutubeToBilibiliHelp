@@ -14,13 +14,16 @@ export const processVideo = (dirPath: string, filename: string) => {
         // const zhSubtitle = path.resolve(dirPath, filename + '.zh-Hans.vtt');
         const zhSubtitle = path.resolve(dirPath, filename + '.zh-Hans-en.vtt');
 
-        if (fs.existsSync(enSubtitle)) return error(`${enSubtitle}不存在`);
-        if (fs.existsSync(zhSubtitle)) return error(`${enSubtitle}不存在`);
         const enStyle = 'FontSize=14,PrimaryColour=&H80ffff&,MarginV=30';
         const zhStyle = 'FontSize=14,PrimaryColour=&H80ffff&,MarginV=0';
-
         // 给视频压制双字幕
-        const command = `ffmpeg -i "${videoPath}" -vf "subtitles=${enSubtitle}:force_style='${enStyle}',subtitles=${zhSubtitle}:force_style='${zhStyle}'" -c:a copy "${dirPath}/${filename}.output.mp4"`
+        let command = `ffmpeg -i "${videoPath}" -vf "subtitles=${enSubtitle}:force_style='${enStyle}',subtitles=${zhSubtitle}:force_style='${zhStyle}'" -c:a copy "${dirPath}/${filename}.output.mp4"`
+
+        if (!fs.existsSync(enSubtitle)) return error(`${enSubtitle}不存在`);
+        if (!fs.existsSync(zhSubtitle)) {
+            error(`${zhSubtitle}不存在,只压制英语字幕`);
+            command = `ffmpeg -i "${videoPath}" -vf "subtitles=${enSubtitle}:force_style='${zhStyle}'" -c:a copy "${dirPath}/${filename}.output.mp4"`
+        }
         warn(command);
         execCommand(command, resolve, reject);
     })
