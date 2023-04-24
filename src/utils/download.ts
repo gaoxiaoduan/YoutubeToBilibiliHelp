@@ -1,6 +1,8 @@
 import {error, log, warn} from "./log";
 import {getYTDL} from "./getYTDL";
 import {IChangedInfo} from "../listening";
+import path from "path";
+import fs from "fs";
 
 const ytdl = getYTDL();
 
@@ -41,6 +43,15 @@ export const download = async (changedInfo: IChangedInfo, isDownSubs: boolean = 
         dirPath,
         filename
     } = changedInfo.video_info;
+
+    if (!isDownSubs) {
+        const outputFilePath = path.resolve(dirPath, filename + '.mp4');
+        if (fs.existsSync(outputFilePath)) {
+            warn(`-----${process} 已经存在-----\n`)
+            return true;
+        }
+    }
+
 
     warn(`-----${process}阶段开始-----\n`)
     log("videoURL", videoUrl);
