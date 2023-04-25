@@ -27,7 +27,7 @@ export const processVideo = (dirPath: string, filename: string) => {
         if (!fs.existsSync(enSubPath)) {
             warn('英语字幕不存在,输出原视频');
             fs.copyFileSync(videoPath, outputFile);
-            resolve(true);
+            return resolve(true);
         }
 
         let zhSubPath = ''; // 确定 中文字幕路径

@@ -56,15 +56,8 @@ export const download = async (changedInfo: IChangedInfo, isDownSubs: boolean = 
     warn(`-----${process}阶段开始-----\n`)
     log("videoURL", videoUrl);
 
-    // const metadata = await ytdl.getVideoInfo(videoUrl);
-    // metadata.filename = filename;
-    // console.log(metadata)
-    // const {} = metadata;
     warn(`视频作者：${uploader}`);
     warn(`视频标题：${title}`);
-
-    // const dirPath = mkdir(uploader);
-    // metadata.dirPath = dirPath;
 
     log('\noutput dir：', dirPath);
 

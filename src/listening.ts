@@ -10,6 +10,8 @@ type configType = typeof upload_log.default;
 export interface IChangedInfo {
     user: string;
     user_url: string;
+    publish_prefix?: string;
+    blibli_classification?: number[];
     video_info: {
         id: string;
         video_url: string;
@@ -19,6 +21,7 @@ export interface IChangedInfo {
         dirPath: string;
         filename: string;
         uploadTitle: string;
+        tags: string[];
         published: string[];
     }
 }
@@ -49,12 +52,26 @@ const checkChange = async () => {
             const dirPath = mkdir(uploader);
             const filename = getCurrentTime('yyyy_MM_dd') + '__' + id;
 
-            const translationTitle = await translate(title, null, 'zh-Hans');
-            const uploadTitle = channelItem.publish_prefix + translationTitle.translation?.slice(0, 80) || title || '文件名出问题啦～';
+            const tags = title.match(/#\w+/g).map((t: string) => t && t?.slice(1));
+            const translateTags: string[] = [];
+            const tagLessTitle = title.replace(/#\w+/g, '');
+
+            if (tags && tags.length) {
+                for (const tag of tags) {
+                    const translateTag = await translate(tag, null, 'zh-Hans')
+                    translateTags.push(translateTag.translation)
+                }
+            }
+
+            // xxx #shorts #funny #reels #tech #programming #coding #meme
+            const translationTitle = await translate(tagLessTitle, null, 'zh-Hans');
+            // publish_prefix xxx #shorts #funny #reels #tech #programming #coding #meme
+            const uploadTitle = channelItem.publish_prefix + translationTitle.translation?.slice(0, 80) || tagLessTitle || '文件名出问题啦～';
 
             const changedInfo: IChangedInfo = {
                 user: channelItem.user,
                 user_url: channelItem.user_url,
+                blibli_classification: channelItem.blibli_classification,
                 video_info: {
                     id,
                     video_url,
@@ -64,6 +81,7 @@ const checkChange = async () => {
                     dirPath,
                     filename,
                     uploadTitle,
+                    tags: translateTags,
                     published: []
                 }
             };

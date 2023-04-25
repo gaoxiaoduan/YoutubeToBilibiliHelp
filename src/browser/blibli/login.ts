@@ -14,9 +14,8 @@ export const login = async (page: Page) => {
 
     await page.goto('https://member.bilibili.com/platform/home');
     // await page.screenshot({path: puppeteerScreenshotDir + '1_login.png'})
-
+    // TODO：待修改登录逻辑
     const {BliBli_USERNAME, BliBli_PASSWORD} = process.env;
-    log(BliBli_USERNAME, BliBli_PASSWORD);
     if (page.url() === 'https://passport.bilibili.com/login') {
         log('开始登录');
         await page.type("input[placeholder=\"请输入账号\"]", `${BliBli_USERNAME}`, {delay: 50})

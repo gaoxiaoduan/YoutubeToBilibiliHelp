@@ -7,7 +7,7 @@ import {IChangedInfo} from "../listening";
 
 export const upload = async (changedInfo: IChangedInfo) => {
     warn('-----自动上传阶段开始-----\n');
-    const {dirPath, filename, title, uploadTitle} = changedInfo.video_info;
+    const {dirPath, filename, title, uploadTitle, tags} = changedInfo.video_info;
     log("dirPath:", dirPath);
     log('filename', filename)
     log("title:", title)
@@ -47,7 +47,7 @@ export const upload = async (changedInfo: IChangedInfo) => {
     await uploadThumbnail(page, outputThumbnail)
 
     // 填写信息
-    await information(page, uploadTitle)
+    await information(page, uploadTitle, changedInfo.blibli_classification, tags)
 
     // 关闭浏览器
     await browser.close();

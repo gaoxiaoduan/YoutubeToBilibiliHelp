@@ -13,7 +13,8 @@ declare module "upload_log.json" {
     export interface Channel {
         user: string;
         user_url: string;
-        publish_prefix: string;
+        publish_prefix?: string;
+        blibli_classification?: number[];
         videos: VideoInfo[];
     }
 

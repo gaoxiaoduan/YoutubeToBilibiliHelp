@@ -8,17 +8,13 @@ export const execCommand = (command: string, resolve: (value: (PromiseLike<unkno
         log(data.toString()); // 输出标准输出内容
     });
 
-    childProcess.stderr.on('data', (data) => {
-        error(data.toString()); // 输出错误输出内容
-    });
-
     childProcess.on('error', (err) => {
         error(err);
         reject(false);
     });
 
     childProcess.on('close', (code) => {
-        log(`子进程退出，退出码：${code}`);
+        log(`任务完成，子进程退出，退出码：${code}`);
         resolve(true)
     });
 }
