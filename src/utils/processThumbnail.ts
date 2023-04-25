@@ -11,7 +11,7 @@ export const processThumbnail = (dirPath: string, filename: string) => {
         const outputThumbnail = path.resolve(dirPath, filename + '.png');
         // 如果这个要转换格式的封面已经存在，跳过，表示之前已经转换过了
         if (fs.existsSync(outputThumbnail)) {
-            resolve(true);
+            return resolve(true);
         }
         // 转换视频格式 webp -> png
         const command = `ffmpeg -i "${thumbnail}" "${outputThumbnail}"`

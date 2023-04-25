@@ -14,7 +14,7 @@ export const processVideo = (dirPath: string, filename: string) => {
 
         // 如果要输出的视频（.output.mp4）已经存在，跳过，表示之前已经转换过了
         if (fs.existsSync(outputFile)) {
-            resolve(true);
+            return resolve(true);
         }
 
         const enStyle = 'FontSize=14,PrimaryColour=&H80ffff&,MarginV=30';
@@ -31,10 +31,10 @@ export const processVideo = (dirPath: string, filename: string) => {
         }
 
         let zhSubPath = ''; // 确定 中文字幕路径
-        if (fs.existsSync(zhSubtitle)) {
-            zhSubPath = zhSubtitle;
-        } else if (fs.existsSync(zhEnSubtitle)) {
+        if (fs.existsSync(zhEnSubtitle)) {
             zhSubPath = zhEnSubtitle;
+        } else if (fs.existsSync(zhSubtitle)) {
+            zhSubPath = zhSubtitle;
         }
 
         // 给视频压制双字幕

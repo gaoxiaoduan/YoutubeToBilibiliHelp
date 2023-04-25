@@ -47,7 +47,7 @@ const checkChange = async () => {
             warn(`发现频道有更新 --> ${uploader}:${title}`);
             warn(`更新视频的URL：${video_url}`)
             const dirPath = mkdir(uploader);
-            const filename = getCurrentTime('yyyy_MM_dd_hh') + '__' + id;
+            const filename = getCurrentTime('yyyy_MM_dd') + '__' + id;
 
             const translationTitle = await translate(title, null, 'zh-Hans');
             const uploadTitle = channelItem.publish_prefix + translationTitle.translation?.slice(0, 80) || title || '文件名出问题啦～';

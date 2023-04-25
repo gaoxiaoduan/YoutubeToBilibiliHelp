@@ -1,6 +1,6 @@
 import type {Page} from "puppeteer";
-import {error, log} from "../../utils";
-import {waitForSelectorTimeout} from "../../constant";
+import {delay, error, log} from "../../utils";
+import {puppeteerScreenshotDir, waitForSelectorTimeout} from "../../constant";
 
 export const uploadFile = async (page: Page, outputFile: string) => {
     const nav_upload_btn = await page.$("#nav_upload_btn");
@@ -23,9 +23,15 @@ export const uploadFile = async (page: Page, outputFile: string) => {
     await fileChooser.accept([outputFile]);
     log('文件选择成功：', outputFile)
 
+    await delay(1000 * 10);
+
+    await page.screenshot({path: puppeteerScreenshotDir + '_1_upload_process.png'})
+
     // 等待上传成功，再填信息
     const success = await page.waitForSelector(".success", {timeout: waitForSelectorTimeout});
     if (!success) return error('未能上传成功')
+
+    await page.screenshot({path: puppeteerScreenshotDir + '_2_upload_process.png'})
 
     log('文件上传成功，开始填写信息')
 }

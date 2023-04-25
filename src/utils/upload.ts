@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
 import path from "path";
 import {log, warn} from "./log";
-import {puppeteerUserDataDir} from "../constant";
+import {puppeteerUserDataDir, waitForSelectorTimeout} from "../constant";
 import {information, login, uploadFile, uploadThumbnail} from "../browser/blibli";
 import {IChangedInfo} from "../listening";
 
@@ -23,7 +23,8 @@ export const upload = async (changedInfo: IChangedInfo) => {
         headless: true,
         args: ['--no-sandbox'],
         slowMo: 250,
-        userDataDir: puppeteerUserDataDir
+        userDataDir: puppeteerUserDataDir,
+        protocolTimeout: waitForSelectorTimeout
     });
 
     // 打开一个新tab页面
