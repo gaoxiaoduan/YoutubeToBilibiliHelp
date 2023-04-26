@@ -40,6 +40,7 @@ const checkChange = async () => {
 
     for (const channelItem of configObj.uploads) {
         const firstVideoInfo = channelItem.videos[0];
+        await delay(1000);
         const playlistEndInfo = await getPlaylistEnd(channelItem.user_url);
         if (playlistEndInfo === '') return error(`最新视频信息获取失败：${channelItem.user_url}`)
         const playlistEndInfoObj = JSON.parse(playlistEndInfo);

@@ -38,7 +38,6 @@ export const download = async (changedInfo: IChangedInfo, isDownSubs: boolean = 
     const process = isDownSubs ? "字幕" : "视频";
     const {
         video_url: videoUrl,
-        uploader, title,
         dirPath,
         filename
     } = changedInfo.video_info;
@@ -51,7 +50,7 @@ export const download = async (changedInfo: IChangedInfo, isDownSubs: boolean = 
         }
     }
 
-    log(`-----${process}阶段开始-----\n`)
+    log(`-----[${process}]阶段开始-----\n`)
 
     try {
         const res = await downloadVideoOrSubs(videoUrl, dirPath, filename, isDownSubs);
@@ -60,6 +59,6 @@ export const download = async (changedInfo: IChangedInfo, isDownSubs: boolean = 
         error("视频下载过程中出错：", e)
         return;
     }
-    log(`-----${process}阶段结束-----\n`)
+    log(`-----[${process}]阶段结束-----\n`)
     return true;
 }

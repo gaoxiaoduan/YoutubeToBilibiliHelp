@@ -1,6 +1,6 @@
 import path from "path";
 import {execCommand} from "./execCommand";
-import {log, warn} from "./log";
+import {log} from "./log";
 import fs from "fs";
 
 

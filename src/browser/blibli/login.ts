@@ -1,4 +1,4 @@
-import {error, log, warn} from "../../utils";
+import {error, log} from "../../utils";
 import type {Page} from "puppeteer";
 import * as fs from "fs";
 import path from "path";

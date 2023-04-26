@@ -1,14 +1,13 @@
 {
-  "apps": [
-    {
-      "name": "ytToX",
-      "script": "temp/index.js",
-      "instances": 1,
-      "env": {
-        "NODE_ENV": "production"
-      },
-      "error_file": "logs/error.log",
-      "out_file": "logs/out.log"
-    }
-  ]
+  "name": "ytToX",
+  "script": "temp/index.js",
+  "instances": 1,
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "log_rotate_interval": "1d",
+  "log_max_size": "10M",
+  "log_date_format": "MM-DD HH:mm:ss-->",
+  "error_file": "logs/error.log",
+  "out_file": "logs/out.log"
 }

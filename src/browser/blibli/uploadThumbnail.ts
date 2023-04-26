@@ -19,5 +19,5 @@ export const uploadThumbnail = async (page: Page, uploadThumbnail: string) => {
     log('封面文件选择成功：', uploadThumbnail)
 
     await page.click('.cover-cut-footer .bcc-button--primary');
-    warn('封面上传成功', uploadThumbnail);
+    log('封面上传成功', uploadThumbnail);
 }

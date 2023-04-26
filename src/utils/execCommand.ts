@@ -10,7 +10,7 @@ export const execCommand = (command: string, resolve: (value: (PromiseLike<unkno
 
     // 进度显示
     childProcess.stderr.on('data', (data) => {
-        error(data.toString()); // 输出错误输出内容
+        warn(data.toString()); // 输出错误输出内容
     });
 
     childProcess.on('error', (err) => {

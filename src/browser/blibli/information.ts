@@ -38,5 +38,5 @@ export const information = async (page: Page, uploadTitle: string, classificatio
 
 
     await page.click('.submit-add');
-    warn('投稿成功:', uploadTitle);
+    log('投稿成功:', uploadTitle);
 }
