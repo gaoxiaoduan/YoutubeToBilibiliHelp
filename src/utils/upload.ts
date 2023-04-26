@@ -1,12 +1,13 @@
 import puppeteer from "puppeteer";
 import path from "path";
-import {log, warn} from "./log";
-import {puppeteerUserDataDir, waitForSelectorTimeout} from "../constant";
+import {log} from "./log";
+import {isDev, puppeteerUserDataDir, waitForSelectorTimeout} from "../constant";
 import {information, login, uploadFile, uploadThumbnail} from "../browser/blibli";
 import {IChangedInfo} from "../listening";
 
+
 export const upload = async (changedInfo: IChangedInfo) => {
-    warn('-----自动上传阶段开始-----\n');
+    log('-----自动上传阶段开始-----\n');
     const {dirPath, filename, title, uploadTitle, tags} = changedInfo.video_info;
     log("dirPath:", dirPath);
     log('filename', filename)
@@ -18,9 +19,9 @@ export const upload = async (changedInfo: IChangedInfo) => {
     log(outputFile);
     log(outputThumbnail);
 
-    warn('启动浏览器...\n')
+    log('启动浏览器...\n')
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: isDev ? false : true, // 默认为true，无头模式
         args: ['--no-sandbox'],
         slowMo: 250,
         userDataDir: puppeteerUserDataDir,

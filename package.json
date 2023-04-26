@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "rm -rf ./temp && tsc && node ./temp",
+    "dev": "rm -rf ./temp && tsc && NODE_ENV=development node ./temp",
     "build": "rm -rf ./temp && tsc"
   },
   "type": "commonjs",

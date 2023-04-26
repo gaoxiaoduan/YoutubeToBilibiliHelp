@@ -2,8 +2,9 @@ import type {Page} from "puppeteer";
 import {delay, log, warn} from "../../utils";
 
 export const uploadThumbnail = async (page: Page, uploadThumbnail: string) => {
-    await delay(1000 * 5);
+    await delay(1000 * 15);
     await page.click('.cover-upload-btn span:first-child');
+    await delay(1000 * 5);
     await page.click('.bcc-dialog .cover-cut-header-tab-item:last-child > .text');
 
 

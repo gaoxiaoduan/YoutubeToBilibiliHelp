@@ -46,9 +46,10 @@ async function main() {
         log("5分钟后执行下一轮监听")
         setInterval(main, 1000 * 60 * 5);
     } catch (e) {
-        error(e)
+        error("捕获到错误：", e)
+        log("10分钟后执行下一轮监听")
+        setInterval(main, 1000 * 60 * 10);
     }
-
 }
 
 main();

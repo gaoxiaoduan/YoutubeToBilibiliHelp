@@ -17,12 +17,11 @@ function downloadVideoOrSubs(videoURL: string, dirPath: string, filename: string
         }
 
         const content = isDownSubs ? '字幕' : '视频';
-        warn(`-----${content} 开始下载-----`);
 
         const downloadChannel = ytdl.exec(commands);
         downloadChannel.on("ytDlpEvent", (eventType: string, eventData: string) => {
             process.stdout.write('\x1b[1A\x1b[2K');
-            log(`${content}-`, eventType, eventData)
+            warn(`${content}-`, eventType, eventData)
         })
             .on("error", (e: Error) => {
                 reject(false)
@@ -47,19 +46,12 @@ export const download = async (changedInfo: IChangedInfo, isDownSubs: boolean = 
     if (!isDownSubs) {
         const outputFilePath = path.resolve(dirPath, filename + '.mp4');
         if (fs.existsSync(outputFilePath)) {
-            warn(`-----${process} 已经存在-----\n`)
+            log(`-----${process} 已经存在-----\n`)
             return true;
         }
     }
 
-
-    warn(`-----${process}阶段开始-----\n`)
-    log("videoURL", videoUrl);
-
-    warn(`视频作者：${uploader}`);
-    warn(`视频标题：${title}`);
-
-    log('\noutput dir：', dirPath);
+    log(`-----${process}阶段开始-----\n`)
 
     try {
         const res = await downloadVideoOrSubs(videoUrl, dirPath, filename, isDownSubs);
@@ -68,6 +60,6 @@ export const download = async (changedInfo: IChangedInfo, isDownSubs: boolean = 
         error("视频下载过程中出错：", e)
         return;
     }
-    warn(`-----${process}阶段结束-----\n`)
+    log(`-----${process}阶段结束-----\n`)
     return true;
 }

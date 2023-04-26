@@ -6,7 +6,7 @@ import {log, warn} from "./log";
 // 给视频加字幕
 export const processVideo = (dirPath: string, filename: string) => {
     return new Promise((resolve, reject) => {
-        warn('-----加字幕阶段开始-----\n');
+        log('-----加字幕阶段开始-----\n');
         log('processVideo:', dirPath, filename)
 
         const videoPath = path.resolve(dirPath, filename + '.mp4')
@@ -14,7 +14,8 @@ export const processVideo = (dirPath: string, filename: string) => {
 
         // 如果要输出的视频（.output.mp4）已经存在，跳过，表示之前已经转换过了
         if (fs.existsSync(outputFile)) {
-            return resolve(true);
+            resolve(true);
+            return
         }
 
         const enStyle = 'FontSize=14,PrimaryColour=&H80ffff&,MarginV=30';
@@ -25,9 +26,10 @@ export const processVideo = (dirPath: string, filename: string) => {
         const zhEnSubtitle = path.resolve(dirPath, filename + '.zh-Hans-en.vtt');
 
         if (!fs.existsSync(enSubPath)) {
-            warn('英语字幕不存在,输出原视频');
+            log('英语字幕不存在,不做处理,将输出原视频');
             fs.copyFileSync(videoPath, outputFile);
-            return resolve(true);
+            resolve(true);
+            return
         }
 
         let zhSubPath = ''; // 确定 中文字幕路径
@@ -40,7 +42,7 @@ export const processVideo = (dirPath: string, filename: string) => {
         // 给视频压制双字幕
         let command = `ffmpeg -i "${videoPath}" -vf "subtitles=${enSubPath}:force_style='${enStyle}',subtitles=${zhSubPath}:force_style='${zhStyle}'" -c:a copy "${outputFile}"`
         if (zhSubPath === '') {
-            warn('中文字幕不存在,只压制英语字幕');
+            log('中文字幕不存在,只压制英语字幕');
             command = `ffmpeg -i "${videoPath}" -vf "subtitles=${enSubPath}:force_style='${zhStyle}'" -c:a copy "${outputFile}"`
         }
         warn(command);

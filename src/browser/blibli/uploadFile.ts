@@ -9,7 +9,7 @@ export const uploadFile = async (page: Page, outputFile: string) => {
     await page.waitForNavigation(); // 等待路由跳转
 
     if (page.url() !== 'https://member.bilibili.com/platform/upload/video/') {
-        return error('未进入视频上传页面');
+        return error('未能成功进入视频上传页面');
     }
     log('进入视频上传页面')
 

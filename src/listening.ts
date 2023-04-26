@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import path from "path";
-import {error, getCurrentTime, getPlaylistEnd, log, mkdir, warn} from "./utils";
+import {delay, error, getCurrentTime, getPlaylistEnd, log, mkdir} from "./utils";
 import {interval} from "./constant";
 import * as upload_log from "upload_log.json";
 import {translate} from "bing-translate-api";
@@ -47,12 +47,12 @@ const checkChange = async () => {
         if (firstVideoInfo.id !== playlistEndInfoObj.id) {
             const {id, title, uploader, upload_date} = playlistEndInfoObj;
             const video_url = `https://www.youtube.com/watch?v=${id}`;
-            warn(`发现频道有更新 --> ${uploader}:${title}`);
-            warn(`更新视频的URL：${video_url}`)
+            log(`发现频道有更新 --> ${uploader}:${title}`);
+            log(`更新视频的URL：${video_url}`)
             const dirPath = mkdir(uploader);
             const filename = getCurrentTime('yyyy_MM_dd') + '__' + id;
 
-            const tags = title.match(/#\w+/g).map((t: string) => t && t?.slice(1));
+            const tags = title.match(/#\w+/g)?.map((t: string) => t && t?.slice(1));
             const translateTags: string[] = [];
             const tagLessTitle = title.replace(/#\w+/g, '');
 
@@ -96,10 +96,17 @@ const checkChange = async () => {
 export const listening = async (): Promise<IChangedInfo> => {
     return new Promise(resolve => {
         setTimeout(async () => {
-            const changedInfo = await checkChange();
-            if (changedInfo) {
-                resolve(changedInfo)
-            } else {
+            try {
+                log('开启一轮频道监测～')
+                const changedInfo = await checkChange();
+                if (changedInfo) {
+                    resolve(changedInfo)
+                } else {
+                    listening().then(resolve);
+                }
+            } catch (e) {
+                error("监听过程中捕获到错误,60s后重新开启监听", e)
+                await delay(1000 * 60);
                 listening().then(resolve);
             }
         }, interval)
