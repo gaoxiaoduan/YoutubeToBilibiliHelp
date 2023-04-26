@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import {outDir} from '../constant'
+import { outDir } from "../constant";
 
 export const mkdir = (dirPath: string) => {
     const dir = path.resolve(__dirname, `../../${outDir}/${dirPath}`);
@@ -8,4 +8,4 @@ export const mkdir = (dirPath: string) => {
         fs.mkdirSync(dir);
     }
     return dir;
-}
+};

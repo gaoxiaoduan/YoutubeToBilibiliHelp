@@ -7,4 +7,4 @@ export const getYTDL = () => {
         return ytdl;
     }
     return ytdl;
-}
+};

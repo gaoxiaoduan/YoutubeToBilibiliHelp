@@ -6,4 +6,4 @@ export const executeTasksInOrder = async (tasks: Array<() => Promise<any>>): Pro
     for (const task of tasks) {
         await task();
     }
-}
+};

@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import chalk from "chalk";
 
 export const log = (...info: any[]) => console.log(chalk.blue(...info));
 export const warn = (...info: any[]) => console.warn(chalk.yellow(...info));

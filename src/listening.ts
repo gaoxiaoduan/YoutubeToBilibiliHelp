@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import path from "path";
-import {delay, error, getCurrentTime, getPlaylistEnd, log, mkdir} from "./utils";
-import {interval} from "./constant";
+import { delay, error, getCurrentTime, getPlaylistEnd, log, mkdir } from "./utils";
+import { interval } from "./constant";
 import * as upload_log from "upload_log.json";
-import {translate} from "bing-translate-api";
+import { translate } from "bing-translate-api";
 
 type configType = typeof upload_log.default;
 
@@ -23,7 +23,7 @@ export interface IChangedInfo {
         uploadTitle: string;
         tags: string[];
         published: string[];
-    }
+    };
 }
 
 //  读配置文件
@@ -34,7 +34,7 @@ export interface IChangedInfo {
 //      -》继续轮训，与json信息做比较
 //  未更新返回false
 const checkChange = async () => {
-    const configPath = path.resolve(__dirname, '../upload_log.json');
+    const configPath = path.resolve(__dirname, "../upload_log.json");
     const config = fs.readFileSync(configPath).toString();
     const configObj: configType = JSON.parse(config);
 
@@ -42,32 +42,32 @@ const checkChange = async () => {
         const firstVideoInfo = channelItem.videos[0];
         await delay(1000);
         const playlistEndInfo = await getPlaylistEnd(channelItem.user_url);
-        if (playlistEndInfo === '') return error(`最新视频信息获取失败：${channelItem.user_url}`)
+        if (playlistEndInfo === "") return error(`最新视频信息获取失败：${channelItem.user_url}`);
         const playlistEndInfoObj = JSON.parse(playlistEndInfo);
 
         if (firstVideoInfo.id !== playlistEndInfoObj.id) {
-            const {id, title, uploader, upload_date} = playlistEndInfoObj;
+            const { id, title, uploader, upload_date } = playlistEndInfoObj;
             const video_url = `https://www.youtube.com/watch?v=${id}`;
             log(`发现频道有更新 --> ${uploader}:${title}`);
-            log(`更新视频的URL：${video_url}`)
+            log(`更新视频的URL：${video_url}`);
             const dirPath = mkdir(uploader);
-            const filename = getCurrentTime('yyyy_MM_dd') + '__' + id;
+            const filename = getCurrentTime("yyyy_MM_dd") + "__" + id;
 
             const tags = title.match(/#\w+/g)?.map((t: string) => t && t?.slice(1));
             const translateTags: string[] = [];
-            const tagLessTitle = title.replace(/#\w+/g, '');
+            const tagLessTitle = title.replace(/#\w+/g, "");
 
             if (tags && tags.length) {
                 for (const tag of tags) {
-                    const translateTag = await translate(tag, null, 'zh-Hans')
-                    translateTags.push(translateTag.translation)
+                    const translateTag = await translate(tag, null, "zh-Hans");
+                    translateTags.push(translateTag.translation);
                 }
             }
 
             // xxx #shorts #funny #reels #tech #programming #coding #meme
-            const translationTitle = await translate(tagLessTitle, null, 'zh-Hans');
+            const translationTitle = await translate(tagLessTitle, null, "zh-Hans");
             // publish_prefix xxx #shorts #funny #reels #tech #programming #coding #meme
-            const uploadTitle = channelItem.publish_prefix + translationTitle.translation?.slice(0, 80) || tagLessTitle || '文件名出问题啦～';
+            const uploadTitle = channelItem.publish_prefix + translationTitle.translation?.slice(0, 80) || tagLessTitle || "文件名出问题啦～";
 
             const changedInfo: IChangedInfo = {
                 user: channelItem.user,
@@ -87,8 +87,8 @@ const checkChange = async () => {
                 }
             };
             channelItem.videos.unshift(changedInfo.video_info);
-            fs.writeFileSync(configPath, JSON.stringify(configObj), 'utf-8');
-            log('upload_log.json 写入成功')
+            fs.writeFileSync(configPath, JSON.stringify(configObj), "utf-8");
+            log("upload_log.json 写入成功");
             return changedInfo;
         }
     }
@@ -98,19 +98,19 @@ export const listening = async (): Promise<IChangedInfo> => {
     return new Promise(resolve => {
         setTimeout(async () => {
             try {
-                log('开启一轮频道监测～')
+                log("开启一轮频道监测～");
                 const changedInfo = await checkChange();
                 if (changedInfo) {
-                    resolve(changedInfo)
+                    resolve(changedInfo);
                 } else {
                     listening().then(resolve);
                 }
             } catch (e) {
-                error("监听过程中捕获到错误,60s后重新开启监听", e)
+                error("监听过程中捕获到错误,60s后重新开启监听", e);
                 await delay(1000 * 60);
                 listening().then(resolve);
             }
-        }, interval)
-    })
-}
+        }, interval);
+    });
+};
 
