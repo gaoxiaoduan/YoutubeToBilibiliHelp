@@ -29,6 +29,7 @@ const uploadJob = async (changedInfo: IChangedInfo) => {
 };
 
 async function main() {
+    log("项目启动～🚀");
     try {
         // 开始监听任务
         const changedInfo = await listening();
