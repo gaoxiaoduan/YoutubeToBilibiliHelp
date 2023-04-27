@@ -43,11 +43,11 @@ async function main() {
         await executeTasksInOrder(jobs);
 
         // 执行完毕,继续新一轮监听任务
-        log("5分钟后执行下一轮监听");
-        setInterval(main, 1000 * 60 * 5);
+        log("上一轮任务执行完毕,10分钟后执行下一轮监听");
+        setInterval(main, 1000 * 60 * 10);
     } catch (e) {
         error("捕获到错误：", e);
-        log("10分钟后执行下一轮监听");
+        log("10分钟后重新开启监听");
         setInterval(main, 1000 * 60 * 10);
     }
 }

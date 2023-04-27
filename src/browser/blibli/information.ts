@@ -1,7 +1,7 @@
 import type { Page } from "puppeteer";
 import { log } from "../../utils";
 
-export const information = async (page: Page, uploadTitle: string, classification = [4, 0], zhTags: string[] = []) => {
+export const information = async (page: Page, uploadTitle: string, classification = [4, 0], tags: string[] = []) => {
     log("1.开始填写标题");
     const title_input = await page.$(".video-title .input-val");
 
@@ -27,7 +27,6 @@ export const information = async (page: Page, uploadTitle: string, classificatio
 
     log("开始填写标签");
     // 3.标签
-    const tags = zhTags.length !== 0 ? zhTags : ["科普动画", "看动画学英语", "趣味故事", "科普一下", "英语口语", "动画英语"];
     const tag_input = await page.$(".tag-input-wrp .input-val");
     for (let i = 0; i < tags.length; i++) {
         await tag_input?.type(tags[i]);

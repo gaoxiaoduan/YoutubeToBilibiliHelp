@@ -40,7 +40,6 @@ const checkChange = async () => {
 
     for (const channelItem of configObj.uploads) {
         const firstVideoInfo = channelItem.videos[0];
-        await delay(1000);
         const playlistEndInfo = await getPlaylistEnd(channelItem.user_url);
         if (playlistEndInfo === "") return error(`最新视频信息获取失败：${channelItem.user_url}`);
         const playlistEndInfoObj = JSON.parse(playlistEndInfo);
@@ -54,7 +53,8 @@ const checkChange = async () => {
             const filename = getCurrentTime("yyyy_MM_dd") + "__" + id;
 
             const tags = title.match(/#\w+/g)?.map((t: string) => t && t?.slice(1));
-            const translateTags: string[] = [];
+            // "科普动画", "看动画学英语", "趣味故事", "科普一下", "英语口语", "动画英语"
+            const translateTags: string[] = [...(channelItem?.prefix_tags || [])];
             const tagLessTitle = title.replace(/#\w+/g, "");
 
             if (tags && tags.length) {
@@ -106,8 +106,8 @@ export const listening = async (): Promise<IChangedInfo> => {
                     listening().then(resolve);
                 }
             } catch (e) {
-                error("监听过程中捕获到错误,60s后重新开启监听", e);
-                await delay(1000 * 60);
+                error(`监听过程中捕获到错误,${interval / 1000}s后重新开启监听`, e);
+                await delay(interval);
                 listening().then(resolve);
             }
         }, interval);

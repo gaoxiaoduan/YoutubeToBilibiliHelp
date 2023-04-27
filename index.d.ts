@@ -1,4 +1,4 @@
-declare module 'youtube-dl-wrap';
+declare module "youtube-dl-wrap";
 
 declare module "upload_log.json" {
     interface VideoInfo {
@@ -15,6 +15,7 @@ declare module "upload_log.json" {
         user_url: string;
         publish_prefix?: string;
         blibli_classification?: number[];
+        prefix_tags: string[];
         videos: VideoInfo[];
     }
 
