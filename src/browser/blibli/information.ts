@@ -1,5 +1,6 @@
 import type { Page } from "puppeteer";
-import { log } from "../../utils";
+import { delay, log } from "../../utils";
+import { puppeteerScreenshotDir } from "../../constant";
 
 export const information = async (page: Page, uploadTitle: string, classification = [4, 0], tags: string[] = []) => {
     log("1.开始填写标题");
@@ -35,7 +36,11 @@ export const information = async (page: Page, uploadTitle: string, classificatio
     log("标签填写完毕");
     // 简介 -> 先不填
 
+    const submitBtn = await page.waitForSelector(".submit-add");
+    await submitBtn?.click();
+    // 这个阶段可能会跳出验证码!
+    await page.screenshot({ path: puppeteerScreenshotDir + "_1_eng.png" });
 
-    await page.click(".submit-add");
     log("投稿成功:", uploadTitle);
+    await delay(1000 * 10);
 };

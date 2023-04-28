@@ -1,5 +1,4 @@
 import fs from "fs";
-import { log } from "./log";
 
 
 /**
@@ -18,7 +17,6 @@ export const processSubtitle: (subtitlePath: string) => Promise<string> = (subti
                     // xxx  <--- 第二句话，保留
                     // 删除多行字幕为单行，删除dddd
                     itemArray.splice(1, 1);
-                    log(itemArray);
                 }
                 return itemArray.join("\n");
             });
