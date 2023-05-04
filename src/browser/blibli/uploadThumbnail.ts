@@ -1,7 +1,9 @@
 import type { Page } from "puppeteer";
 import { delay, log } from "../../utils";
+import fs from "fs";
 
 export const uploadThumbnail = async (page: Page, uploadThumbnail: string) => {
+    if (!fs.existsSync(uploadThumbnail)) return;
     await delay(1000 * 15);
     await page.click(".cover-upload-btn span:first-child");
     await delay(1000 * 5);

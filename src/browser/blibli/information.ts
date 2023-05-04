@@ -38,6 +38,7 @@ export const information = async (page: Page, uploadTitle: string, classificatio
 
     const submitBtn = await page.waitForSelector(".submit-add");
     await submitBtn?.click();
+    await delay(1000 * 5);
     // 这个阶段可能会跳出验证码!
     await page.screenshot({ path: puppeteerScreenshotDir + "_1_eng.png" });
 
