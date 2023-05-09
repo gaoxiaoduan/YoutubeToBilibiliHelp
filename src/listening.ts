@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import path from "path";
-import { delay, error, getCurrentTime, getPlaylistEnd, log, mkdir } from "./utils";
-import { interval } from "./constant";
+import {delay, error, getCurrentTime, getPlaylistEnd, log, mkdir, warn} from "./utils";
+import {interval} from "./constant";
 import * as upload_log from "upload_log.json";
-import { translate } from "bing-translate-api";
+import {translate} from "bing-translate-api";
 
 type configType = typeof upload_log.default;
 
@@ -35,17 +35,31 @@ export interface IChangedInfo {
 //  未更新返回false
 const checkChange = async () => {
     const configPath = path.resolve(__dirname, "../upload_log.json");
+    if (!fs.existsSync(configPath)) {
+        warn("配置文件upload_log不存在");
+        return false;
+    }
     const config = fs.readFileSync(configPath).toString();
     const configObj: configType = JSON.parse(config);
 
     for (const channelItem of configObj.uploads) {
         const firstVideoInfo = channelItem.videos[0];
-        const playlistEndInfo = await getPlaylistEnd(channelItem.user_url);
-        if (playlistEndInfo === "") return error(`最新视频信息获取失败：${channelItem.user_url}`);
+        let playlistEndInfo: string;
+        try {
+            playlistEndInfo = await getPlaylistEnd(channelItem.user_url);
+            if (playlistEndInfo === "") {
+                error(`最新视频信息获取失败：${channelItem.user_url}`);
+                continue;
+            }
+        } catch (e) {
+            error(`捕获到错误：视频获取阶段 `, e);
+            continue;
+        }
+
         const playlistEndInfoObj = JSON.parse(playlistEndInfo);
 
         if (firstVideoInfo.id !== playlistEndInfoObj.id) {
-            const { id, title, uploader, upload_date } = playlistEndInfoObj;
+            const {id, title, uploader, upload_date} = playlistEndInfoObj;
             const video_url = `https://www.youtube.com/watch?v=${id}`;
             log(`发现频道有更新 --> ${uploader}:${title}`);
             log(`更新视频的URL：${video_url}`);
@@ -95,22 +109,22 @@ const checkChange = async () => {
     return false;
 };
 export const listening = async (): Promise<IChangedInfo> => {
-    return new Promise(resolve => {
-        setTimeout(async () => {
-            try {
-                log("开启一轮频道监测～");
-                const changedInfo = await checkChange();
-                if (changedInfo) {
-                    resolve(changedInfo);
-                } else {
-                    listening().then(resolve);
-                }
-            } catch (e) {
-                error(`监听过程中捕获到错误,${interval / 1000}s后重新开启监听`, e);
+    return new Promise(async resolve => {
+        try {
+            log("开启一轮频道监测～");
+            const changedInfo = await checkChange();
+            if (changedInfo) {
+                resolve(changedInfo);
+            } else {
+                log(`等待${interval / 1000}s后开启新一轮监听`);
                 await delay(interval);
                 listening().then(resolve);
             }
-        }, interval);
+        } catch (e) {
+            error(`监听过程中捕获到错误,${interval / 1000}s后重新开启监听`, e);
+            await delay(interval);
+            listening().then(resolve);
+        }
     });
 };
 
