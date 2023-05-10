@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import path from "path";
 import {delay, error, getCurrentTime, getPlaylistEnd, log, mkdir, warn} from "./utils";
-import {interval} from "./constant";
+import {TASK_INTERVAL} from "./constant";
 import * as upload_log from "upload_log.json";
 import {translate} from "bing-translate-api";
 
@@ -116,13 +116,13 @@ export const listening = async (): Promise<IChangedInfo> => {
             if (changedInfo) {
                 resolve(changedInfo);
             } else {
-                log(`等待${interval / 1000}s后开启新一轮监听`);
-                await delay(interval);
+                log(`等待${TASK_INTERVAL / 1000}s后开启新一轮监听`);
+                await delay(TASK_INTERVAL);
                 listening().then(resolve);
             }
         } catch (e) {
-            error(`监听过程中捕获到错误,${interval / 1000}s后重新开启监听`, e);
-            await delay(interval);
+            error(`监听过程中捕获到错误,${TASK_INTERVAL / 1000}s后重新开启监听`, e);
+            await delay(TASK_INTERVAL);
             listening().then(resolve);
         }
     });

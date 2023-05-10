@@ -10,6 +10,6 @@ export const puppeteerUserDataDir = "puppeteer/user/data";
 
 export const puppeteerScreenshotDir = "puppeteer/user/screenshot";
 
-export const interval = isDev ? (1000 * 3) : (1000 * 60 * 10); // 监听频率 10分钟
+export const TASK_INTERVAL = isDev ? (1000 * 3) : (1000 * 60 * 10); // 监听频率 10分钟
 
 export const waitForSelectorTimeout = 1000 * 60 * 60 * 2; // 等待上传时间
