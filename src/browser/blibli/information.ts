@@ -1,6 +1,7 @@
 import type { Page } from "puppeteer";
 import { delay, log } from "../../utils";
 import { puppeteerScreenshotDir } from "../../constant";
+import { getPoint } from "../../utils/getPoint";
 
 export const information = async (page: Page, uploadTitle: string, classification = [4, 0], tags: string[] = []) => {
     log("1.开始填写标题");
@@ -42,6 +43,31 @@ export const information = async (page: Page, uploadTitle: string, classificatio
     // 这个阶段可能会跳出验证码!
     await page.screenshot({path: puppeteerScreenshotDir + "_1_eng.png"});
 
+    const verificationCodeElement = await page.waitForSelector(".geetest_panel_next");
+    if (verificationCodeElement) {
+        log("出现验证码");
+        const verificationCodeSavePath = puppeteerScreenshotDir + "_verification_code.png";
+        await verificationCodeElement.screenshot({
+            path: verificationCodeSavePath,
+        });
+
+        const points = await getPoint(verificationCodeSavePath);
+        if (points.length === 0) return;
+
+        for (const [x, y] of points) {
+            await delay(1000);
+            await verificationCodeElement.click({
+                offset: {
+                    x: x,
+                    y: y
+                }
+            });
+        }
+    }
+
+    await delay(1000);
+    const geetest_commit = await page.$(".geetest_commit");
+    await geetest_commit?.click();
     log("投稿成功:", uploadTitle);
-    await delay(1000 * 10);
+    await delay(1000 * 5);
 };

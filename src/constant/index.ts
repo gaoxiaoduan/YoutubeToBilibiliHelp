@@ -2,7 +2,7 @@ export const isDev = process.env.NODE_ENV === "development"; // 开发环境
 
 export const outDir = "./videos"; // 下载目录
 
-export const PROXY = ""; // 代理->设置为"",则不使用代理
+export const PROXY = ""; // 代理->设置为"",则不走代理，直接连接，可能会被墙
 
 export const puppeteerUserDataDir = "puppeteer/user/data"; // puppeteer用户数据目录
 

@@ -34,7 +34,7 @@ export const upload = async (changedInfo: IChangedInfo) => {
     await page.setViewport({
         width: 1200,
         height: 1080,
-        deviceScaleFactor: 2,
+        deviceScaleFactor: 1,
         isMobile: false,
         hasTouch: false
     });
