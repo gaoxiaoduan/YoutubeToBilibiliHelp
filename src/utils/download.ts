@@ -3,19 +3,20 @@ import { getYTDL } from "./getYTDL";
 import { IChangedInfo } from "../listening";
 import path from "path";
 import fs from "fs";
+import { PROXY } from "../constant";
 
 const ytdl = getYTDL();
 
 function downloadVideoOrSubs(videoURL: string, dirPath: string, filename: string, isDownSubs: boolean = false) {
     return new Promise((resolve, reject) => {
         // 下载视频
-        let commands = [`${videoURL}`, "-f", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4", "--write-thumbnail", "-o", `${dirPath}/${filename}.%(ext)s`];
+        let commands = [`${videoURL}`, "--proxy", `${PROXY}`, "-f", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4", "--write-thumbnail", "-o", `${dirPath}/${filename}.%(ext)s`];
         if (isDownSubs) {
             // 下载字幕 '--write-sub', zh-CN,zh-Hans,
             // 中文字幕可能会下载2个格式的，zh-Hans|zh-Hans-en
-            commands = [`${videoURL}`, "--write-auto-sub", "--write-sub", "--sub-lang", "en,zh-Hans,zh-Hans-en", "--sub-format", "vtt", "--skip-download", "-o", `${dirPath}/${filename}.%(ext)s`];
+            commands = [`${videoURL}`, "--proxy", `${PROXY}`, "--write-auto-sub", "--write-sub", "--sub-lang", "en,zh-Hans,zh-Hans-en", "--sub-format", "vtt", "--skip-download", "-o", `${dirPath}/${filename}.%(ext)s`];
         }
-
+        log("下载命令：", commands.join(" "));
         const content = isDownSubs ? "字幕" : "视频";
 
         const downloadChannel = ytdl.exec(commands);

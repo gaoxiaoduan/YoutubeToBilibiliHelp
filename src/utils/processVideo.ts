@@ -50,10 +50,10 @@ export const processVideo = (dirPath: string, filename: string) => {
 
 
         // 给视频压制双字幕
-        let command = `ffmpeg -i "${videoPath}" -vf "subtitles=${enSubPath}:force_style='${enStyle}',subtitles=${zhSubPath}:force_style='${zhStyle}'" -c:a copy "${outputFile}"`;
+        let command = `ffmpeg -i "${videoPath}" -vf "subtitles=${enSubPath}:force_style='${enStyle}',subtitles=${zhSubPath}:force_style='${zhStyle}'" -c:a copy "${outputFile}" -hide_banner`;
         if (zhSubPath === "") {
             log("中文字幕不存在,只压制英语字幕");
-            command = `ffmpeg -i "${videoPath}" -vf "subtitles=${enSubPath}:force_style='${zhStyle}'" -c:a copy "${outputFile}"`;
+            command = `ffmpeg -i "${videoPath}" -vf "subtitles=${enSubPath}:force_style='${zhStyle}'" -c:a copy "${outputFile}" -hide_banner`;
         }
         warn(command);
         execCommand(command, resolve, reject);

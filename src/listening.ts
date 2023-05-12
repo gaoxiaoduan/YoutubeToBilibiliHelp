@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import path from "path";
-import {delay, error, getCurrentTime, getPlaylistEnd, log, mkdir, warn} from "./utils";
-import {TASK_INTERVAL} from "./constant";
+import { delay, error, getCurrentTime, getPlaylistEnd, log, mkdir, warn } from "./utils";
+import { REGEXP_TAGS, TASK_INTERVAL } from "./constant";
 import * as upload_log from "upload_log.json";
-import {translate} from "bing-translate-api";
+import { translate } from "bing-translate-api";
 
 type configType = typeof upload_log.default;
 
@@ -11,6 +11,7 @@ export interface IChangedInfo {
     user: string;
     user_url: string;
     publish_prefix?: string;
+    skip_down_subs?: boolean;
     blibli_classification?: number[];
     video_info: {
         id: string;
@@ -66,10 +67,10 @@ const checkChange = async () => {
             const dirPath = mkdir(uploader);
             const filename = getCurrentTime("yyyy_MM_dd") + "__" + id;
 
-            const tags = title.match(/#\w+/g)?.map((t: string) => t && t?.slice(1));
+            const tags = title.match(REGEXP_TAGS)?.map((t: string) => t && t?.slice(1));
             // "科普动画", "看动画学英语", "趣味故事", "科普一下", "英语口语", "动画英语"
             const translateTags: string[] = [...(channelItem?.prefix_tags || [])];
-            const tagLessTitle = title.replace(/#\w+/g, "");
+            const tagLessTitle = title.replace(REGEXP_TAGS, "");
 
             if (tags && tags.length) {
                 for (const tag of tags) {
@@ -86,6 +87,7 @@ const checkChange = async () => {
             const changedInfo: IChangedInfo = {
                 user: channelItem.user,
                 user_url: channelItem.user_url,
+                skip_down_subs: channelItem?.skip_down_subs,
                 blibli_classification: channelItem.blibli_classification,
                 video_info: {
                     id,

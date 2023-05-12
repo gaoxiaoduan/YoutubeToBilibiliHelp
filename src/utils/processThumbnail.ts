@@ -15,7 +15,7 @@ export const processThumbnail = (dirPath: string, filename: string) => {
             return;
         }
         // 转换视频格式 webp -> png
-        const command = `ffmpeg -i "${thumbnail}" "${outputThumbnail}"`;
+        const command = `ffmpeg -i "${thumbnail}" "${outputThumbnail}" -hide_banner`;
         execCommand(command, resolve, reject);
     });
 };

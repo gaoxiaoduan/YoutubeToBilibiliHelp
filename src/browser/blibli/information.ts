@@ -40,7 +40,7 @@ export const information = async (page: Page, uploadTitle: string, classificatio
     await submitBtn?.click();
     await delay(1000 * 5);
     // 这个阶段可能会跳出验证码!
-    await page.screenshot({ path: puppeteerScreenshotDir + "_1_eng.png" });
+    await page.screenshot({path: puppeteerScreenshotDir + "_1_eng.png"});
 
     log("投稿成功:", uploadTitle);
     await delay(1000 * 10);

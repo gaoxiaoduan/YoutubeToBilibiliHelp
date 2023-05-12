@@ -1,12 +1,14 @@
-import {download, error, executeTasksInOrder, log, processThumbnail, processVideo, upload} from "./utils";
-import {IChangedInfo, listening} from "./listening";
+import { download, error, executeTasksInOrder, log, processThumbnail, processVideo, upload } from "./utils";
+import { IChangedInfo, listening } from "./listening";
 import * as dotenv from "dotenv";
-import {TASK_INTERVAL} from "./constant";
+import { TASK_INTERVAL } from "./constant";
 
 dotenv.config();
 
 const downloadVideoJob = async (changedInfo: IChangedInfo) => {
-    await download(changedInfo, true);
+    if (!changedInfo.skip_down_subs) {
+        await download(changedInfo, true);
+    }
     await download(changedInfo);
 };
 

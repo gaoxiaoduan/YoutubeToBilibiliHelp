@@ -1,14 +1,14 @@
 import puppeteer from "puppeteer";
 import path from "path";
 import { log } from "./log";
-import { isDev, puppeteerUserDataDir, waitForSelectorTimeout } from "../constant";
+import { isDev, puppeteerUserDataDir, USER_AGENT, waitForSelectorTimeout } from "../constant";
 import { information, login, uploadFile, uploadThumbnail } from "../browser/blibli";
 import { IChangedInfo } from "../listening";
 
 
 export const upload = async (changedInfo: IChangedInfo) => {
     log("-----自动上传阶段开始-----\n");
-    const { dirPath, filename, title, uploadTitle, tags } = changedInfo.video_info;
+    const {dirPath, filename, title, uploadTitle, tags} = changedInfo.video_info;
     log("dirPath:", dirPath);
     log("filename", filename);
     log("title:", title);
@@ -28,6 +28,7 @@ export const upload = async (changedInfo: IChangedInfo) => {
         protocolTimeout: waitForSelectorTimeout
     });
 
+
     // 打开一个新tab页面
     const page = await browser.newPage();
     await page.setViewport({
@@ -37,6 +38,8 @@ export const upload = async (changedInfo: IChangedInfo) => {
         isMobile: false,
         hasTouch: false
     });
+
+    USER_AGENT && await page.setUserAgent(USER_AGENT);
 
     // 登录
     await login(page);

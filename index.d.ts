@@ -14,6 +14,7 @@ declare module "upload_log.json" {
         user: string;
         user_url: string;
         publish_prefix?: string;
+        skip_down_subs?: boolean;
         blibli_classification?: number[];
         prefix_tags: string[];
         videos: VideoInfo[];
