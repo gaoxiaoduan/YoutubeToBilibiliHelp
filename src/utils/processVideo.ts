@@ -48,6 +48,10 @@ export const processVideo = (dirPath: string, filename: string) => {
         const enStyle = commonStyle + "FontSize=9,MarginV=3";
         const zhStyle = commonStyle + `FontSize=14,MarginV=${isSingle ? 15 : 25}`;
 
+        if (process.platform === "win32") {
+            enSubPath = processWinPath(enSubPath);
+            zhSubPath = processWinPath(zhSubPath);
+        }
 
         // 给视频压制双字幕
         let command = `ffmpeg -i "${videoPath}" -vf "subtitles=${enSubPath}:force_style='${enStyle}',subtitles=${zhSubPath}:force_style='${zhStyle}'" -c:a copy "${outputFile}" -hide_banner`;
@@ -58,4 +62,13 @@ export const processVideo = (dirPath: string, filename: string) => {
         warn(command);
         execCommand(command, resolve, reject);
     });
+};
+
+// C:\gkd\project\YoutubeToBilibiliHelp\videos\SeanAslam\2023_05_13__mqoCtTvTO1U.en.vtt
+// 转换后
+// 'C\:/gkd/project/YoutubeToBilibiliHelp/videos/Sean Aslam/2023_05_13__mqoCtTvTO1U.en.vtt'
+const processWinPath = (pathString: string): string => {
+    let normalizedPath = pathString.split(path.sep).join("/");
+    normalizedPath = normalizedPath.replace(":", "\\:");
+    return `\'${normalizedPath}\'`;
 };

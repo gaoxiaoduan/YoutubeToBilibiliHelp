@@ -13,6 +13,7 @@ export const uploadFile = async (page: Page, outputFile: string) => {
     }
     log("进入视频上传页面");
 
+    await delay(1000 * 3);
     log("开始选择上传文件");
     const [fileChooser] = await Promise.all([
         page.waitForFileChooser(),

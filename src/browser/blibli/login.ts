@@ -7,10 +7,12 @@ import { puppeteerScreenshotDir } from "../../constant";
 const cookiePath = path.resolve(__dirname, "../../../cookies.txt");
 
 export const login = async (page: Page) => {
-    const lastCookieString = fs.readFileSync(cookiePath);
-    if (lastCookieString.length !== 0) {
-        const cookies = JSON.parse(lastCookieString.toString());
-        await page.setCookie(...cookies);
+    if (fs.existsSync(cookiePath)) {
+        const lastCookieString = fs.readFileSync(cookiePath);
+        if (lastCookieString.length !== 0) {
+            const cookies = JSON.parse(lastCookieString.toString());
+            await page.setCookie(...cookies);
+        }
     }
 
     await page.goto("https://member.bilibili.com/platform/home");
@@ -28,10 +30,11 @@ export const login = async (page: Page) => {
         const loginBtn = await page.waitForSelector(".btn_wp > .btn_primary");
         // 点击登录按钮
         await loginBtn?.click();
-        log("\n需要手动点击验证码！！！");
+        log("\n需要手动点击验证码!!!");
         await page.screenshot({path: puppeteerScreenshotDir + "_2_login.png"});
 
         while (true) {
+            // TODO:替换成自动点击验证码
             // 等待点击验证码后，页面重新加载
             await page.waitForNavigation({
                 waitUntil: "load"

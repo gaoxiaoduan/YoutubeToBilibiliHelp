@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "dev": "rm -rf ./temp && tsc && NODE_ENV=development node ./temp",
-    "build": "rm -rf ./temp && tsc"
+    "dev": "rimraf ./temp && tsc && cross-env NODE_ENV=development node ./temp",
+    "build": "rimraf ./temp && tsc"
   },
   "type": "commonjs",
   "dependencies": {
@@ -9,11 +9,13 @@
     "bing-translate-api": "^2.9.0",
     "chalk": "4.x",
     "dotenv": "^16.0.3",
-    "puppeteer": "^19.9.1",
+    "puppeteer": "^20.2.0",
     "yt-dlp-wrap": "^2.3.11"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",
+    "cross-env": "^7.0.3",
+    "rimraf": "^5.0.0",
     "typescript": "^5.0.4"
   }
 }
