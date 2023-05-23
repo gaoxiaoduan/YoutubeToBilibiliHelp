@@ -16,6 +16,7 @@ declare module "upload_log.json" {
         publish_prefix?: string;
         skip_down_subs?: boolean;
         blibli_classification?: number[];
+        submission_categories?: boolean; // 投稿分类 true:自制 false:转载
         prefix_tags: string[];
         videos: VideoInfo[];
     }

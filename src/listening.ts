@@ -8,11 +8,12 @@ import { translate } from "bing-translate-api";
 type configType = typeof upload_log.default;
 
 export interface IChangedInfo {
-    user: string;
-    user_url: string;
-    publish_prefix?: string;
-    skip_down_subs?: boolean;
-    blibli_classification?: number[];
+    user: string; // 频道名称
+    user_url: string; // 频道地址
+    publish_prefix?: string; // 发布前缀
+    skip_down_subs?: boolean; // 是否跳过下载字幕 true:跳过 false:下载
+    blibli_classification?: number[]; // 投稿分区
+    submission_categories?: boolean; // 投稿类别 true:自制 false:转载
     video_info: {
         id: string;
         video_url: string;
@@ -85,10 +86,7 @@ const checkChange = async () => {
             const uploadTitle = channelItem.publish_prefix + translationTitle.translation?.slice(0, 80) || tagLessTitle || "文件名出问题啦～";
 
             const changedInfo: IChangedInfo = {
-                user: channelItem.user,
-                user_url: channelItem.user_url,
-                skip_down_subs: channelItem?.skip_down_subs,
-                blibli_classification: channelItem.blibli_classification,
+                ...channelItem,
                 video_info: {
                     id,
                     video_url,

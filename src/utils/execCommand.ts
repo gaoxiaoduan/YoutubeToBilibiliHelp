@@ -1,16 +1,21 @@
 import { error, log, warn } from "./log";
 import { spawn } from "child_process";
+import { isDev } from "../constant";
 
 export const execCommand = (command: string, resolve: (value: (PromiseLike<unknown> | unknown)) => void, reject: (reason?: any) => void,) => {
     warn("command:", command);
     const childProcess = spawn(command, {shell: true});
     childProcess.stdout.on("data", (data) => {
-        log(data.toString()); // 输出标准输出内容
+        if (isDev) {
+            log(data.toString()); // 输出标准输出内容
+        }
     });
 
     // 进度显示
     childProcess.stderr.on("data", (data) => {
-        warn(data.toString()); // 输出错误输出内容
+        if (isDev) {
+            warn(data.toString()); // 输出错误输出内容
+        }
     });
 
     childProcess.on("error", (err) => {

@@ -3,6 +3,7 @@ import { getYTDL } from "./getYTDL";
 import { IChangedInfo } from "../listening";
 import path from "path";
 import fs from "fs";
+import { isDev } from "../constant";
 
 const ytdl = getYTDL();
 
@@ -20,8 +21,10 @@ function downloadVideoOrSubs(videoURL: string, dirPath: string, filename: string
 
         const downloadChannel = ytdl.exec(commands);
         downloadChannel.on("ytDlpEvent", (eventType: string, eventData: string) => {
-            process.stdout.write("\x1b[1A\x1b[2K");
-            warn(`${content}-`, eventType, eventData);
+            if (isDev) {
+                process.stdout.write("\x1b[1A\x1b[2K");
+                warn(`${content}-`, eventType, eventData);
+            }
         })
             .on("error", (e: Error) => {
                 reject(false);

@@ -8,16 +8,10 @@ import { IChangedInfo } from "../listening";
 
 export const upload = async (changedInfo: IChangedInfo) => {
     log("-----自动上传阶段开始-----\n");
-    const {dirPath, filename, title, uploadTitle, tags} = changedInfo.video_info;
-    log("dirPath:", dirPath);
-    log("filename", filename);
-    log("title:", title);
+    const {dirPath, filename} = changedInfo.video_info;
 
     const outputFile = path.resolve(dirPath, filename + ".output.mp4");
     const outputThumbnail = path.resolve(dirPath, filename + ".png");
-
-    log(outputFile);
-    log(outputThumbnail);
 
     log("启动浏览器...\n");
     const browser = await puppeteer.launch({
@@ -51,7 +45,7 @@ export const upload = async (changedInfo: IChangedInfo) => {
     await uploadThumbnail(page, outputThumbnail);
 
     // 填写信息
-    await information(page, uploadTitle, changedInfo.blibli_classification, tags);
+    await information(page, changedInfo);
 
     // 关闭浏览器
     await browser.close();

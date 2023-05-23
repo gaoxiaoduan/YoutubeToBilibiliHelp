@@ -1,9 +1,12 @@
 import type { Page } from "puppeteer";
-import { delay, log } from "../../utils";
+import { delay, error, log } from "../../utils";
 import { puppeteerScreenshotDir } from "../../constant";
 import { getPoint } from "../../utils/getPoint";
+import { IChangedInfo } from "../../listening";
 
-export const information = async (page: Page, uploadTitle: string, classification = [4, 0], tags: string[] = []) => {
+export const information = async (page: Page, changedInfo: IChangedInfo) => {
+    const {uploadTitle, tags = [], video_url} = changedInfo.video_info;
+    const {blibli_classification: classification = [4, 0], submission_categories = false} = changedInfo;
     log("1.开始填写标题");
     const title_input = await page.$(".video-title .input-val");
 
@@ -14,6 +17,13 @@ export const information = async (page: Page, uploadTitle: string, classificatio
     }
     await page.type(".input-val", uploadTitle);
     log(`标题填写完成：${uploadTitle}`);
+
+    if (!submission_categories) {
+        log("选择投稿类型为:转载");
+        await page.click(".type-check div:nth-child(2) > span.check-radio-v2-box");
+        await page.type(".type-source-input-wrp .input-val", video_url);
+    }
+
 
     log("开始选择分区");
     // 2.选择分区 知识->科学科普
@@ -43,31 +53,36 @@ export const information = async (page: Page, uploadTitle: string, classificatio
     // 这个阶段可能会跳出验证码!
     await page.screenshot({path: puppeteerScreenshotDir + "_1_eng.png"});
 
-    const verificationCodeElement = await page.waitForSelector(".geetest_panel_next");
-    if (verificationCodeElement) {
-        log("出现验证码");
-        const verificationCodeSavePath = puppeteerScreenshotDir + "_verification_code.png";
-        await verificationCodeElement.screenshot({
-            path: verificationCodeSavePath,
-        });
-
-        const points = await getPoint(verificationCodeSavePath);
-        if (points.length === 0) return;
-
-        for (const [x, y] of points) {
-            await delay(1000);
-            await verificationCodeElement.click({
-                offset: {
-                    x: x,
-                    y: y
-                }
+    try {
+        const verificationCodeElement = await page.waitForSelector(".geetest_panel_next");
+        if (verificationCodeElement) {
+            log("出现验证码");
+            const verificationCodeSavePath = puppeteerScreenshotDir + "_verification_code.png";
+            await verificationCodeElement.screenshot({
+                path: verificationCodeSavePath,
             });
+
+            const points = await getPoint(verificationCodeSavePath);
+            if (points.length === 0) return;
+
+            for (const [x, y] of points) {
+                await delay(1000);
+                await verificationCodeElement.click({
+                    offset: {
+                        x: x,
+                        y: y
+                    }
+                });
+            }
         }
+
+        await delay(1000);
+        const geetest_commit = await page.$(".geetest_commit");
+        await geetest_commit?.click();
+    } catch (e) {
+        error("未捕获到验证码:", e);
     }
 
-    await delay(1000);
-    const geetest_commit = await page.$(".geetest_commit");
-    await geetest_commit?.click();
     log("投稿成功:", uploadTitle);
     await delay(1000 * 5);
 };
