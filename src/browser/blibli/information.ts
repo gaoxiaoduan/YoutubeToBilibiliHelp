@@ -1,12 +1,12 @@
 import type { Page } from "puppeteer";
-import { delay, error, log } from "../../utils";
-import { puppeteerScreenshotDir } from "../../constant";
-import { getPoint } from "../../utils/getPoint";
+import { delay, log } from "../../utils";
+import { isDev, puppeteerScreenshotDir } from "../../constant";
+import { handleVerificationCode } from "../../utils/handleVerificationCode";
 import { IChangedInfo } from "../../listening";
 
 export const information = async (page: Page, changedInfo: IChangedInfo) => {
     const {uploadTitle, tags = [], video_url} = changedInfo.video_info;
-    const {blibli_classification: classification = [4, 0], submission_categories = false} = changedInfo;
+    const {blibli_classification: classification = [0, 0], submission_categories = false} = changedInfo;
     log("1.开始填写标题");
     const title_input = await page.$(".video-title .input-val");
 
@@ -51,37 +51,9 @@ export const information = async (page: Page, changedInfo: IChangedInfo) => {
     await submitBtn?.click();
     await delay(1000 * 5);
     // 这个阶段可能会跳出验证码!
-    await page.screenshot({path: puppeteerScreenshotDir + "_1_eng.png"});
+    isDev && await page.screenshot({path: puppeteerScreenshotDir + "_1_eng.png"});
 
-    try {
-        const verificationCodeElement = await page.waitForSelector(".geetest_panel_next");
-        if (verificationCodeElement) {
-            log("出现验证码");
-            const verificationCodeSavePath = puppeteerScreenshotDir + "_verification_code.png";
-            await verificationCodeElement.screenshot({
-                path: verificationCodeSavePath,
-            });
-
-            const points = await getPoint(verificationCodeSavePath);
-            if (points.length === 0) return;
-
-            for (const [x, y] of points) {
-                await delay(1000);
-                await verificationCodeElement.click({
-                    offset: {
-                        x: x,
-                        y: y
-                    }
-                });
-            }
-        }
-
-        await delay(1000);
-        const geetest_commit = await page.$(".geetest_commit");
-        await geetest_commit?.click();
-    } catch (e) {
-        error("未捕获到验证码:", e);
-    }
+    await handleVerificationCode(page, puppeteerScreenshotDir);
 
     log("投稿成功:", uploadTitle);
     await delay(1000 * 5);

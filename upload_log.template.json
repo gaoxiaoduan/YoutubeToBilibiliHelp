@@ -4,40 +4,18 @@
   ],
   "uploads": [
     {
-      "user": "user1",
-      "user_url": "https://www.youtube.com/@user1/videos",
-      "publish_prefix": "【xxx】",
-      "videos": [
-        {
-          "id": "xxx",
-          "video_url": "https://www.youtube.com/watch?v=xxx",
-          "title": "xxx",
-          "uploader": "xxx",
-          "upload_date": "xxx",
-          "dirPath": "xxx",
-          "filename": "xxx",
-          "uploadTitle": "xxx",
-          "published": []
-        }
-      ]
-    },
-    {
-      "user": "user2",
-      "user_url": "https://www.youtube.com/@user2/videos",
-      "publish_prefix": "【xxx】",
-      "videos": [
-        {
-          "id": "xxx",
-          "video_url": "https://www.youtube.com/watch?v=xxx",
-          "title": "xxx",
-          "uploader": "xxx",
-          "upload_date": "xxx",
-          "dirPath": "xxx",
-          "filename": "xxx",
-          "uploadTitle": "xxx",
-          "published": []
-        }
-      ]
+      "user": "addyvisuals",
+      "user_url": "https://www.youtube.com/@addyvisuals/videos",
+      "publish_prefix": "",
+      "blibli_classification": [
+        0,
+        0
+      ],
+      "prefix_tags": [
+        "科技",
+        "技术"
+      ],
+      "videos": []
     }
   ]
 }

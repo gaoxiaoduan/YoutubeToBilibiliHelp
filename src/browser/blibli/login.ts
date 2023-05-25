@@ -1,10 +1,11 @@
-import { error, log } from "../../utils";
+import { delay, error, log } from "../../utils";
 import type { Page } from "puppeteer";
 import * as fs from "fs";
 import path from "path";
-import { puppeteerScreenshotDir } from "../../constant";
+import { isDev, puppeteerScreenshotDir } from "../../constant";
+import { handleVerificationCode } from "../../utils/handleVerificationCode";
 
-const cookiePath = path.resolve(__dirname, "../../../cookies.txt");
+const cookiePath = path.resolve(__dirname, "../../../cookies.json");
 
 export const login = async (page: Page) => {
     if (fs.existsSync(cookiePath)) {
@@ -16,7 +17,7 @@ export const login = async (page: Page) => {
     }
 
     await page.goto("https://member.bilibili.com/platform/home");
-    await page.screenshot({path: puppeteerScreenshotDir + "_1_login.png"});
+    isDev && await page.screenshot({path: puppeteerScreenshotDir + "_1_login.png"});
 
     if (page.url() === "https://passport.bilibili.com/login") {
         log("开始登录");
@@ -30,8 +31,11 @@ export const login = async (page: Page) => {
         const loginBtn = await page.waitForSelector(".btn_wp > .btn_primary");
         // 点击登录按钮
         await loginBtn?.click();
-        log("\n需要手动点击验证码!!!");
-        await page.screenshot({path: puppeteerScreenshotDir + "_2_login.png"});
+        await delay(1000 * 3);
+
+        isDev && await page.screenshot({path: puppeteerScreenshotDir + "_2_login.png"});
+
+        await handleVerificationCode(page, puppeteerScreenshotDir);
 
         while (true) {
             // TODO:替换成自动点击验证码
@@ -55,5 +59,5 @@ export const login = async (page: Page) => {
     }
 
     log("成功进入创作中心");
-    await page.screenshot({path: puppeteerScreenshotDir + "_3_login.png"});
+    isDev && await page.screenshot({path: puppeteerScreenshotDir + "_3_login.png"});
 };

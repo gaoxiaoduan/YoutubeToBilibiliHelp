@@ -45,7 +45,6 @@ const checkChange = async () => {
     const configObj: configType = JSON.parse(config);
 
     for (const channelItem of configObj.uploads) {
-        const firstVideoInfo = channelItem.videos[0];
         let playlistEndInfo: string;
         try {
             playlistEndInfo = await getPlaylistEnd(channelItem.user_url);
@@ -60,7 +59,8 @@ const checkChange = async () => {
 
         const playlistEndInfoObj = JSON.parse(playlistEndInfo);
 
-        if (firstVideoInfo.id !== playlistEndInfoObj.id) {
+        const videos = channelItem.videos;
+        if (videos.length === 0 || videos[0].id !== playlistEndInfoObj.id) {
             const {id, title, uploader, upload_date} = playlistEndInfoObj;
             const video_url = `https://www.youtube.com/watch?v=${id}`;
             log(`发现频道有更新 --> ${uploader}:${title}`);
@@ -108,6 +108,7 @@ const checkChange = async () => {
     }
     return false;
 };
+
 export const listening = async (): Promise<IChangedInfo> => {
     return new Promise(async resolve => {
         try {
