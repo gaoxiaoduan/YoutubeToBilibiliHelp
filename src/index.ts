@@ -2,6 +2,7 @@ import { download, error, executeTasksInOrder, log, processThumbnail, processVid
 import { IChangedInfo, listening } from "./listening";
 import * as dotenv from "dotenv";
 import { TASK_INTERVAL } from "./constant";
+import fs from "fs";
 
 dotenv.config();
 
@@ -31,6 +32,13 @@ const uploadJob = async (changedInfo: IChangedInfo) => {
     await upload(changedInfo);
 };
 
+// 清理上传成功的文件
+const clearFile = async (changedInfo: IChangedInfo) => {
+    const {video_info} = changedInfo;
+    fs.rmSync(video_info.dirPath, {recursive: true});
+    log("成功删除文件:", video_info.dirPath);
+};
+
 async function main() {
     log("项目启动～🚀");
     try {
@@ -42,6 +50,7 @@ async function main() {
             processThumbnailJob.bind(null, changedInfo),
             processVideoJob.bind(null, changedInfo),
             uploadJob.bind(null, changedInfo),
+            clearFile.bind(null, changedInfo)
         ];
 
         await executeTasksInOrder(jobs);

@@ -67,7 +67,7 @@ TJ_PASSWORD="xxx" #打码平台密码
 
 - upload_log.json 配置文件
 - 主要功能：监听用户频道信息
-- json有多个配置字段，具体可以查看IChangedInfo接口定义
+- json有多个配置字段，具体可以查看`IChangedInfo`接口定义
 - 但是只有几个字段是监听所必要的，下面用*号标记出来，也可以直接使用upload_log.template.json
 
 ```json3
@@ -122,8 +122,13 @@ npm i pm2 -g # 安装pm2
 
 ```bash
 pnpm dev # 开发启动命令
+# 注意，开发模式下，会自动打开桌面版本浏览器
+# 若是在无desktop环境的linux服务器上调试,需要注释以下内容
+# src/utils/upload.ts
+# //headless: !isDev, // 默认为true，无头模式
 
-#挂机运行模式
+
+# 挂机运行模式
 pnpm build # build项目
 pm2 start pm2.config.json # 启动项目
 pm2 stop pm2.config.json # 停止项目
@@ -136,7 +141,7 @@ pm2 stop pm2.config.json # 停止项目
 ```typescript
 // src\constant\index.ts
 // 代理->设置为"",则不走代理｜若直连，可能会被墙，建议给终端走代理，这里默认使用clash本地代理
-export const PROXY = "http://127.0.0.1:7890";
+export const PROXY = "socks5://127.0.0.1:7890";
 ```
 
 - 若报下面的错误，可以将package.json中把puppeteer改为：^18，然后再次pnpm i
@@ -154,3 +159,12 @@ Error: Could not find Chromium (rev. 1108766).
 │ ERROR: Failed to set up Chrome r113.0.5672.63! Set "PUPPETEER_SKIP_DOWNLOAD" env variable to skip download.
 ```
 
+- 若提示下面的错，无法正常启动浏览器,可以指定Chromium/Chrome的路径
+  - Error: Failed to Launch the browser process!
+
+```ts
+// src/utils/upload.ts
+const browser = await puppeteer.launch({
+  executablePath: "/usr/bin/chromium",// 指定Chromium/Chrome的路径
+});
+```
