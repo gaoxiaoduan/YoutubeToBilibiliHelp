@@ -2,6 +2,22 @@
   "supported_target_platform": [
     "BZ"
   ],
+  "custom_time_channel": {
+    "user": "addyvisuals",
+    "user_url": "https://www.youtube.com/@addyvisuals/videos",
+    "date_after": "20230226",
+    "date_before": "",
+    "publish_prefix": "",
+    "blibli_classification": [
+      0,
+      0
+    ],
+    "prefix_tags": [
+      "科技",
+      "技术"
+    ],
+    "videos": []
+  },
   "uploads": [
     {
       "user": "addyvisuals",

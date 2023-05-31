@@ -24,7 +24,6 @@ SET PUPPETEER_SKIP_DOWNLOAD='true' #win
 export PUPPETEER_SKIP_DOWNLOAD='true' #linux
 ```
 
-
 ### yt-dlp
 
 - [https://github.com/yt-dlp/yt-dlp#installation](https://github.com/yt-dlp/yt-dlp#installation)
@@ -67,7 +66,7 @@ TJ_PASSWORD="xxx" #打码平台密码
 
 - upload_log.json 配置文件
 - 主要功能：监听用户频道信息
-- json有多个配置字段，具体可以查看`IChangedInfo`接口定义
+- json文件有多个配置字段，具体可以查看`index.d.ts`类型定义
 - 但是只有几个字段是监听所必要的，下面用*号标记出来，也可以直接使用upload_log.template.json
 
 ```json3
@@ -84,7 +83,7 @@ TJ_PASSWORD="xxx" #打码平台密码
       // *监听频道的地址,若要监听油管短视频，可把url最后的videos换成shorts
       "user_url": "https://www.youtube.com/@addyvisuals/videos",
       // *发布时候，标题党前缀，若不需要设置，可以设置为空字符串""
-      "publish_prefix": "[教授Professor]",
+      "publish_prefix": "[xxx]",
       // *发布B站分区，默认是B站推荐分区，也就是[0,0]
       "blibli_classification": [
         0,
@@ -95,6 +94,10 @@ TJ_PASSWORD="xxx" #打码平台密码
         "科技",
         "技术"
       ],
+      // 是否跳过下载字幕 true:跳过 false:下载 -> 默认下载:false
+      skip_down_subs: false;
+      // 投稿分类 true:自制 false:转载 -> 默认转载:false
+      submission_categories: false; 
       // 保存捕获到的视频信息
       "videos": []
     },
@@ -107,6 +110,37 @@ TJ_PASSWORD="xxx" #打码平台密码
       ...
     },
   ]
+}
+```
+
+## 根据自定义日期,自动搬运视频
+
+- 在upload_log.json 配置文件中添加`custom_time_channel`对象信息
+- 与`uploads`配置主要的区别是多了两个字段，`date_after`和`date_before`
+- `date_after`：自定义日期，搬运该日期之后的视频
+- `date_before`：自定义日期，搬运该日期之前的视频
+- 日期格式：`YYYYMMDD`，例如：`20230226`
+- 例如：要搬运2023年2月26日之后的视频，可以这样配置
+- 注意：⚠️若配置了`custom_time_channel`，则`uploads`配置无效，不会进行监听
+
+```json3
+{
+  "custom_time_channel": {
+    "user": "addyvisuals",
+    "user_url": "https://www.youtube.com/@addyvisuals/videos",
+    "date_after": "20230226",
+    "date_before": "",
+    "publish_prefix": "",
+    "blibli_classification": [
+      0,
+      0
+    ],
+    "prefix_tags": [
+      "科技",
+      "技术"
+    ],
+    "videos": []
+  }
 }
 ```
 

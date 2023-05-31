@@ -1,31 +1,11 @@
-import * as fs from "fs";
-import path from "path";
-import { delay, error, getCurrentTime, getPlaylistEnd, log, mkdir, warn } from "./utils";
-import { REGEXP_TAGS, TASK_INTERVAL } from "./constant";
-import * as upload_log from "upload_log.json";
+import fs from "fs";
+import { delay, error, getConfigFile, getCurrentTime, getPlaylistEnd, log, mkdir } from "./utils";
 import { translate } from "bing-translate-api";
+import { REGEXP_TAGS, TASK_INTERVAL } from "./constant";
+import type { Channel, VideoInfo } from "upload_log.json";
 
-type configType = typeof upload_log.default;
-
-export interface IChangedInfo {
-    user: string; // 频道名称
-    user_url: string; // 频道地址
-    publish_prefix?: string; // 发布前缀
-    skip_down_subs?: boolean; // 是否跳过下载字幕 true:跳过 false:下载
-    blibli_classification?: number[]; // 投稿分区
-    submission_categories?: boolean; // 投稿类别 true:自制 false:转载
-    video_info: {
-        id: string;
-        video_url: string;
-        title: string;
-        uploader: string;
-        upload_date: string;
-        dirPath: string;
-        filename: string;
-        uploadTitle: string;
-        tags: string[];
-        published: string[];
-    };
+export interface IChangedInfo extends Omit<Channel, "videos"> {
+    video_info: VideoInfo;
 }
 
 //  读配置文件
@@ -36,15 +16,10 @@ export interface IChangedInfo {
 //      -》继续轮训，与json信息做比较
 //  未更新返回false
 const checkChange = async () => {
-    const configPath = path.resolve(__dirname, "../upload_log.json");
-    if (!fs.existsSync(configPath)) {
-        warn("配置文件upload_log不存在");
-        return false;
-    }
-    const config = fs.readFileSync(configPath).toString();
-    const configObj: configType = JSON.parse(config);
+    const {config, configPath} = getConfigFile();
+    if (!config) return error("配置文件读取失败");
 
-    for (const channelItem of configObj.uploads) {
+    for (const channelItem of config.uploads) {
         let playlistEndInfo: string;
         try {
             playlistEndInfo = await getPlaylistEnd(channelItem.user_url);
@@ -61,7 +36,7 @@ const checkChange = async () => {
 
         const videos = channelItem.videos;
         if (videos.length === 0 || videos[0].id !== playlistEndInfoObj.id) {
-            const {id, title, uploader, upload_date} = playlistEndInfoObj;
+            const {id, title, uploader}: { id: string, title: string, uploader: string } = playlistEndInfoObj;
             const video_url = `https://www.youtube.com/watch?v=${id}`;
             log(`发现频道有更新 --> ${uploader}:${title}`);
             log(`更新视频的URL：${video_url}`);
@@ -91,17 +66,15 @@ const checkChange = async () => {
                     id,
                     video_url,
                     title,
-                    uploader,
-                    upload_date,
                     dirPath,
                     filename,
                     uploadTitle,
                     tags: translateTags,
-                    published: []
                 }
             };
+
             channelItem.videos.unshift(changedInfo.video_info);
-            fs.writeFileSync(configPath, JSON.stringify(configObj), "utf-8");
+            fs.writeFileSync(configPath, JSON.stringify(config), "utf-8");
             log("upload_log.json 写入成功");
             return changedInfo;
         }

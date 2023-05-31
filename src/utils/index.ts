@@ -17,3 +17,5 @@ export { delay } from "./delay";
 export { executeTasksInOrder } from "./executeTasksInOrder";
 
 export { getCurrentTime } from "./getCurrentTime";
+
+export { getConfigFile } from "./getConfigFile";
