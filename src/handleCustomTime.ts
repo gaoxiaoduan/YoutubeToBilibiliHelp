@@ -18,19 +18,23 @@ export const handleCustomTime = async (channel: customTimeChannel, config: Confi
         const dirPath = mkdir(uploader);
         const filename = getCurrentTime("yyyy_MM_dd") + "__" + id;
 
-        const tags = title.match(REGEXP_TAGS)?.map((t: string) => t && t?.slice(1));
+        const tags = title.match(REGEXP_TAGS)?.map((t: string) => t && t?.slice(1)) || [];
         const translateTags: string[] = [...(channel?.prefix_tags || [])];
         const tagLessTitle = title.replace(REGEXP_TAGS, "");
+        let uploadTitle = channel.publish_prefix || "";
 
-        if (tags && tags.length) {
-            for (const tag of tags) {
-                const translateTag = await translate(tag, null, "zh-Hans");
-                translateTags.push(translateTag.translation);
+        if (!channel.skip_translation_title) {
+            if (tags && tags.length) {
+                for (const tag of tags) {
+                    const translateTag = await translate(tag, null, "zh-Hans");
+                    translateTags.push(translateTag.translation);
+                }
             }
+            const translationTitle = await translate(tagLessTitle, null, "zh-Hans");
+            uploadTitle += translationTitle.translation?.slice(0, 80) || tagLessTitle || "文件名出问题啦～";
+        } else {
+            uploadTitle += tagLessTitle || "文件名出问题啦～";
         }
-
-        const translationTitle = await translate(tagLessTitle, null, "zh-Hans");
-        const uploadTitle = channel.publish_prefix + translationTitle.translation?.slice(0, 80) || tagLessTitle || "文件名出问题啦～";
 
         const video_info: VideoInfo = {
             id,
@@ -39,7 +43,7 @@ export const handleCustomTime = async (channel: customTimeChannel, config: Confi
             dirPath,
             filename,
             uploadTitle,
-            tags: translateTags,
+            tags: !channel.skip_translation_title ? translateTags : tags,
         }
         const changedInfo = {
             ...channel,

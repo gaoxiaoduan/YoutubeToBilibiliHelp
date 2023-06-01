@@ -11,7 +11,7 @@ export const getCustomTimeList = (custom_time_channel: customTimeChannel): Promi
     const {user_url, date_after, date_before} = custom_time_channel;
     return new Promise((resolve, reject) => {
         // 跳过下载，获取指定日期内的视频信息
-        const command = [`${user_url}`, "--proxy", `${PROXY}`, "--dateafter", `${date_after || currentTime}`, "--datebefore", `${date_before || currentTime}`, "--skip-download", "--print-json"];
+        const command = [`${user_url}`, "--proxy", `${PROXY || ('\"\"')}`, "--dateafter", `${date_after || currentTime}`, "--datebefore", `${date_before || currentTime}`, "--skip-download", "--print-json"];
 
         log("command", command.join(" "))
 

@@ -43,22 +43,24 @@ const checkChange = async () => {
             const dirPath = mkdir(uploader);
             const filename = getCurrentTime("yyyy_MM_dd") + "__" + id;
 
-            const tags = title.match(REGEXP_TAGS)?.map((t: string) => t && t?.slice(1));
+            const tags = title.match(REGEXP_TAGS)?.map((t: string) => t && t?.slice(1)) || [];
             // "科普动画", "看动画学英语", "趣味故事", "科普一下", "英语口语", "动画英语"
             const translateTags: string[] = [...(channelItem?.prefix_tags || [])];
             const tagLessTitle = title.replace(REGEXP_TAGS, "");
+            let uploadTitle = channelItem.publish_prefix || "";
 
-            if (tags && tags.length) {
-                for (const tag of tags) {
-                    const translateTag = await translate(tag, null, "zh-Hans");
-                    translateTags.push(translateTag.translation);
+            if (!channelItem.skip_translation_title) {
+                if (tags && tags.length) {
+                    for (const tag of tags) {
+                        const translateTag = await translate(tag, null, "zh-Hans");
+                        translateTags.push(translateTag.translation);
+                    }
                 }
+                const translationTitle = await translate(tagLessTitle, null, "zh-Hans");
+                uploadTitle += translationTitle.translation?.slice(0, 80) || tagLessTitle || "文件名出问题啦～";
+            } else {
+                uploadTitle += tagLessTitle || "文件名出问题啦～";
             }
-
-            // xxx #shorts #funny #reels #tech #programming #coding #meme
-            const translationTitle = await translate(tagLessTitle, null, "zh-Hans");
-            // publish_prefix xxx #shorts #funny #reels #tech #programming #coding #meme
-            const uploadTitle = channelItem.publish_prefix + translationTitle.translation?.slice(0, 80) || tagLessTitle || "文件名出问题啦～";
 
             const changedInfo: IChangedInfo = {
                 ...channelItem,
@@ -69,7 +71,7 @@ const checkChange = async () => {
                     dirPath,
                     filename,
                     uploadTitle,
-                    tags: translateTags,
+                    tags: !channelItem.skip_translation_title ? translateTags : tags,
                 }
             };
 

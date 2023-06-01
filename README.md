@@ -95,9 +95,11 @@ TJ_PASSWORD="xxx" #打码平台密码
         "技术"
       ],
       // 是否跳过下载字幕 true:跳过 false:下载 -> 默认下载:false
-      skip_down_subs: false;
+      skip_down_subs: false,
+      // 是否跳过翻译标题 true:跳过 false:翻译 -> 默认翻译:false
+      skip_translation_title?: false,
       // 投稿分类 true:自制 false:转载 -> 默认转载:false
-      submission_categories: false; 
+      submission_categories: false, 
       // 保存捕获到的视频信息
       "videos": []
     },
