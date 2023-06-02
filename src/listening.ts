@@ -45,7 +45,7 @@ const checkChange = async () => {
 
             const tags = title.match(REGEXP_TAGS)?.map((t: string) => t && t?.slice(1)) || [];
             // "科普动画", "看动画学英语", "趣味故事", "科普一下", "英语口语", "动画英语"
-            const translateTags: string[] = [...(channelItem?.prefix_tags || [])];
+            const translateTags: string[] = [...(channelItem?.prefix_tags || ["vlog"])];
             const tagLessTitle = title.replace(REGEXP_TAGS, "");
             let uploadTitle = channelItem.publish_prefix || "";
 
@@ -71,7 +71,7 @@ const checkChange = async () => {
                     dirPath,
                     filename,
                     uploadTitle,
-                    tags: !channelItem.skip_translation_title ? translateTags : tags,
+                    tags: translateTags,
                 }
             };
 

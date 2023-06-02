@@ -21,6 +21,7 @@ export const information = async (page: Page, changedInfo: IChangedInfo) => {
     if (!submission_categories) {
         log("选择投稿类型为:转载");
         await page.click(".type-check div:nth-child(2) > span.check-radio-v2-box");
+        await delay(2000);
         await page.type(".type-source-input-wrp .input-val", video_url);
     }
 

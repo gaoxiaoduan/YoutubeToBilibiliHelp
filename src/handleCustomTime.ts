@@ -19,7 +19,7 @@ export const handleCustomTime = async (channel: customTimeChannel, config: Confi
         const filename = getCurrentTime("yyyy_MM_dd") + "__" + id;
 
         const tags = title.match(REGEXP_TAGS)?.map((t: string) => t && t?.slice(1)) || [];
-        const translateTags: string[] = [...(channel?.prefix_tags || [])];
+        const translateTags: string[] = [...(channel?.prefix_tags || ["vlog"])];
         const tagLessTitle = title.replace(REGEXP_TAGS, "");
         let uploadTitle = channel.publish_prefix || "";
 
@@ -43,7 +43,7 @@ export const handleCustomTime = async (channel: customTimeChannel, config: Confi
             dirPath,
             filename,
             uploadTitle,
-            tags: !channel.skip_translation_title ? translateTags : tags,
+            tags: translateTags,
         }
         const changedInfo = {
             ...channel,

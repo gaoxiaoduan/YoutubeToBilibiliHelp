@@ -1,6 +1,6 @@
 import fs from "fs";
 import axios from "axios";
-import { error, log } from "./log";
+import { error, log, warn } from "./log";
 import type { Page } from "puppeteer";
 import { delay } from "./delay";
 
@@ -62,6 +62,6 @@ export const handleVerificationCode = async (page: Page, puppeteerScreenshotDir:
         const geetest_commit = await page.$(".geetest_commit");
         await geetest_commit?.click();
     } catch (e) {
-        error("未捕获到验证码:", e);
+        warn("未捕获到验证码:", e);
     }
 }
