@@ -1,8 +1,15 @@
-import type { Page } from "puppeteer";
+import path from "path";
 import { delay, error, log } from "../../utils";
 import { isDev, puppeteerScreenshotDir, waitForSelectorTimeout } from "../../constant";
+import type { Page } from "puppeteer";
+import type { IChangedInfo } from "../../listening";
 
-export const uploadFile = async (page: Page, outputFile: string) => {
+
+export const uploadFile = async (page: Page, changedInfo: IChangedInfo) => {
+    const {dirPath, filename} = changedInfo.video_info;
+
+    const outputFile = path.resolve(dirPath, filename + ".output.mp4");
+
     const nav_upload_btn = await page.$("#nav_upload_btn");
     await nav_upload_btn?.click(); // 进入上传页面按钮
 

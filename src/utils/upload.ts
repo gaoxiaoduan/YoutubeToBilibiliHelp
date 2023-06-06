@@ -1,5 +1,4 @@
 import puppeteer from "puppeteer";
-import path from "path";
 import { log } from "./log";
 import { isDev, puppeteerUserDataDir, USER_AGENT, waitForSelectorTimeout } from "../constant";
 import { information, login, uploadFile, uploadThumbnail } from "../browser/blibli";
@@ -8,10 +7,6 @@ import { IChangedInfo } from "../listening";
 
 export const upload = async (changedInfo: IChangedInfo) => {
     log("-----自动上传阶段开始-----\n");
-    const {dirPath, filename} = changedInfo.video_info;
-
-    const outputFile = path.resolve(dirPath, filename + ".output.mp4");
-    const outputThumbnail = path.resolve(dirPath, filename + ".png");
 
     log("启动浏览器...\n");
     const browser = await puppeteer.launch({
@@ -39,10 +34,10 @@ export const upload = async (changedInfo: IChangedInfo) => {
     await login(page);
 
     // 文件上传
-    await uploadFile(page, outputFile);
+    await uploadFile(page, changedInfo);
 
     // 上传封面
-    await uploadThumbnail(page, outputThumbnail);
+    await uploadThumbnail(page, changedInfo);
 
     // 填写信息
     await information(page, changedInfo);

@@ -1,9 +1,15 @@
 import type { Page } from "puppeteer";
 import { delay, log } from "../../utils";
 import fs from "fs";
+import type { IChangedInfo } from "../../listening";
+import path from "path";
 
-export const uploadThumbnail = async (page: Page, uploadThumbnail: string) => {
-    if (!fs.existsSync(uploadThumbnail)) return;
+export const uploadThumbnail = async (page: Page, changedInfo: IChangedInfo) => {
+    if (changedInfo?.skip_upload_thumbnail) return;
+    const {dirPath, filename} = changedInfo.video_info;
+    const outputThumbnail = path.resolve(dirPath, filename + ".png");
+    if (!fs.existsSync(outputThumbnail)) return;
+
     await delay(1000 * 15);
     await page.click(".cover-upload-btn span:first-child");
     await delay(1000 * 5);
@@ -17,9 +23,20 @@ export const uploadThumbnail = async (page: Page, uploadThumbnail: string) => {
     ]);
 
     // 选择要上传的文件
-    await fileChooser.accept([uploadThumbnail]);
-    log("封面文件选择成功：", uploadThumbnail);
+    await fileChooser.accept([outputThumbnail]);
+
+    // toaster-v2-wrp error
+    try {
+        const errorBox = await page.waitForSelector(".toaster-v2-wrp.error", {timeout: 1000 * 10});
+        if (!errorBox) {
+            log("图片解析失败，请上传 960*600 尺寸以上图片 ->", outputThumbnail);
+            await page.click(".bcc-dialog .cover-cut-header-icon");
+            return
+        }
+    } catch (e) {
+        log("图片解析成功");
+    }
 
     await page.click(".cover-cut-footer .bcc-button--primary");
-    log("封面上传成功", uploadThumbnail);
+    log("封面上传成功", outputThumbnail);
 };
