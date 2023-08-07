@@ -20,6 +20,7 @@ export const uploadFile = async (page: Page, changedInfo: IChangedInfo) => {
     }
     log("进入视频上传页面");
 
+
     await delay(1000 * 3);
     log("开始选择上传文件");
     const [fileChooser] = await Promise.all([
@@ -32,6 +33,8 @@ export const uploadFile = async (page: Page, changedInfo: IChangedInfo) => {
     log("文件选择成功：", outputFile);
 
     await delay(1000 * 10);
+    const tipDialogCloseBtn = await page.$(".videoup-notification-dialog .bcc-dialog__footer > button");
+    tipDialogCloseBtn && await tipDialogCloseBtn?.click();
 
     isDev && await page.screenshot({path: puppeteerScreenshotDir + "_1_upload_process.png"});
 
