@@ -1,15 +1,13 @@
 import { delay, logger } from "../../utils";
 import type { Page } from "puppeteer";
 import * as fs from "fs";
-import path from "path";
-import { isDev, puppeteerScreenshotDir } from "../../constant";
+import { COOKIE_PATH, isDev, puppeteerScreenshotDir } from "../../constant";
 import { handleVerificationCode } from "../../utils/handleVerificationCode";
 
-const cookiePath = path.resolve(__dirname, "../../../cookies.json");
 
 export const login = async (page: Page) => {
-    if (fs.existsSync(cookiePath)) {
-        const lastCookieString = fs.readFileSync(cookiePath);
+    if (fs.existsSync(COOKIE_PATH)) {
+        const lastCookieString = fs.readFileSync(COOKIE_PATH);
         if (lastCookieString.length !== 0) {
             const cookies = JSON.parse(lastCookieString.toString());
             await page.setCookie(...cookies);
@@ -53,7 +51,7 @@ export const login = async (page: Page) => {
     try {
         const cookies = await page.cookies();
         const cookiesString = JSON.stringify(cookies);
-        fs.writeFileSync(cookiePath, cookiesString);
+        fs.writeFileSync(COOKIE_PATH, cookiesString);
     } catch (e) {
         logger.error("cookie写入失败:", e);
     }

@@ -4,10 +4,9 @@ import { getCustomTimeList } from "./utils/getCustomTimeList";
 import { getCurrentTime, logger, mkdir } from "./utils";
 import { processSingleVideo } from "./processSingleVideo";
 import { REGEXP_TAGS } from "./constant";
-import type { Config, customTimeChannel, VideoInfo } from "upload_log.json";
 import type { IChangedInfo } from "./listening";
 
-export const handleCustomTime = async (channel: customTimeChannel, config: Config, configPath: string) => {
+export const handleCustomTime = async (channel: upload_log_type.customTimeChannel, config: upload_log_type.Config, configPath: string) => {
     let videoInfoList = await getCustomTimeList(channel);
     if (!videoInfoList || !videoInfoList.length) return logger.info("没有获取到视频信息");
 
@@ -36,7 +35,7 @@ export const handleCustomTime = async (channel: customTimeChannel, config: Confi
             uploadTitle += tagLessTitle || "文件名出问题啦～";
         }
 
-        const video_info: VideoInfo = {
+        const video_info: upload_log_type.VideoInfo = {
             id,
             video_url,
             title,

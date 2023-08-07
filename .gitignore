@@ -1,6 +1,7 @@
 .idea
-node_modules
-temp
+node_modules/
+dist/
+temp/
 
 videos/**
 logs/**
@@ -8,7 +9,7 @@ logs/**
 !videos!
 
 .env
-puppeteer
+puppeteer/
 
 upload_log.json
 cookies.json

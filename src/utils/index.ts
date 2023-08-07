@@ -2,7 +2,6 @@ export * from "./logger";
 export * from "./download";
 export * from "./mkdir";
 export * from "./processVideo";
-export * from "./upload";
 export * from "./processThumbnail";
 export * from "./getPlaylistEnd";
 export * from "./delay";

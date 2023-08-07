@@ -1,4 +1,6 @@
-export const isDev = process.env.NODE_ENV === "development"; // 开发环境
+import path from "path";
+
+export const isDev = process.env.BUILD === "development"; // 开发环境
 
 export const PROXY = "socks5://127.0.0.1:7890"; // 代理->设置为"",则不走代理｜若直连，可能会被墙，建议给终端走代理，这里默认使用clash本地代理
 
@@ -6,7 +8,11 @@ export const TASK_INTERVAL = isDev ? (1000 * 3) : (1000 * 60 * 10); // 监听频
 
 export const waitForSelectorTimeout = 1000 * 60 * 60 * 2; // 等待上传时间
 
-export const outDir = "./videos"; // 下载目录
+export const OUTPUT_DIR = path.resolve("./videos"); // 下载目录
+
+export const COOKIE_PATH = path.resolve("./cookies.json"); // cookie文件路径
+
+export const CONFIG_PATH = path.resolve("./upload_log.json"); // 配置文件路径
 
 export const puppeteerUserDataDir = "puppeteer/user/data"; // puppeteer用户数据目录
 

@@ -1,7 +1,5 @@
-declare module "youtube-dl-wrap";
-
-declare module "upload_log.json" {
-    export interface VideoInfo {
+declare namespace upload_log_type {
+    interface VideoInfo {
         id: string;
         video_url: string;
         title: string;
@@ -11,7 +9,7 @@ declare module "upload_log.json" {
         tags: string[];
     }
 
-    export interface Channel {
+    interface Channel {
         user: string; // 频道用户名
         user_url: string; // 频道地址
         publish_prefix?: string; // 发布前缀
@@ -24,18 +22,15 @@ declare module "upload_log.json" {
         videos: VideoInfo[]; // 已发布视频信息
     }
 
-    export interface customTimeChannel extends Channel {
+    interface customTimeChannel extends Channel {
         date_after: string;
         date_before: string;
     }
 
-    export interface Config {
+    interface Config {
         supported_target_platform: string[];
         // 自定义时间
         custom_time_channel?: customTimeChannel;
         uploads: Channel[];
     }
-
-    const config: Config;
-    export default config;
 }

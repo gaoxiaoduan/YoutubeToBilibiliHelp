@@ -71,7 +71,7 @@ TJ_PASSWORD="xxx" #打码平台密码
 
 - upload_log.json 配置文件
 - 主要功能：监听用户频道信息
-- json文件有多个配置字段，具体可以查看`index.d.ts`类型定义
+- json文件有多个配置字段，具体可以查看`typing.d.ts`类型定义
 - 但是只有几个字段是监听所必要的，下面用*号标记出来，也可以直接使用upload_log.template.json
 
 ```json3

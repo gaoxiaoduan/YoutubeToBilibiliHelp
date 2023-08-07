@@ -1,9 +1,11 @@
 {
+  "module": "./dist/index.js",
   "scripts": {
-    "dev": "rimraf ./temp && tsc && cross-env NODE_ENV=development node ./temp",
-    "build": "rimraf ./temp && tsc"
+    "build": "rollup -c --environment BUILD:production",
+    "build:dev": "rollup -c --environment BUILD:development",
+    "dev": "node ./dist/index.js"
   },
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "axios": "^1.4.0",
     "bing-translate-api": "^2.9.0",
@@ -13,9 +15,11 @@
     "yt-dlp-wrap": "^2.3.11"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@rollup/plugin-typescript": "^11.1.2",
     "@types/node": "^18.15.11",
-    "cross-env": "^7.0.3",
-    "rimraf": "^5.0.0",
+    "rollup": "^3.27.2",
+    "rollup-plugin-node-externals": "^6.1.1",
     "typescript": "^5.0.4"
   }
 }

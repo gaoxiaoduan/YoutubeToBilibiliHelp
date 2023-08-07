@@ -1,12 +1,11 @@
 import { logger } from "./logger";
 import { getYTDL } from "./getYTDL";
-import type { customTimeChannel } from "upload_log.json";
 import { getCurrentTime } from "./getCurrentTime";
 import { PROXY } from "../constant";
 
 const ytdl = getYTDL();
 
-export const getCustomTimeList = (custom_time_channel: customTimeChannel): Promise<any[]> => {
+export const getCustomTimeList = (custom_time_channel: upload_log_type.customTimeChannel): Promise<any[]> => {
     const currentTime = getCurrentTime("yyyyMMdd");
     const {user_url, date_after, date_before} = custom_time_channel;
     return new Promise((resolve, reject) => {

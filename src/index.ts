@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { getConfigFile, logger } from "./utils";
 import { listening } from "./listening";
-import { TASK_INTERVAL } from "./constant";
+import { CONFIG_PATH, TASK_INTERVAL } from "./constant";
 import { handleCustomTime } from "./handleCustomTime";
 import { processSingleVideo } from "./processSingleVideo";
 
@@ -9,11 +9,11 @@ async function main() {
     logger.info("项目启动～🚀");
 
     // 读取配置文件
-    const {config, configPath} = getConfigFile();
+    const {config} = getConfigFile();
     if (!config) return logger.error("配置文件读取失败");
     if (config?.custom_time_channel) {
         logger.info("根据自定义时间获取视频");
-        await handleCustomTime(config?.custom_time_channel, config, configPath);
+        await handleCustomTime(config?.custom_time_channel, config, CONFIG_PATH);
     } else {
         logger.info("开始监听任务");
         try {

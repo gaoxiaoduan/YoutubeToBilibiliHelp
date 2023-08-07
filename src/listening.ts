@@ -1,11 +1,10 @@
 import fs from "fs";
 import { delay, getConfigFile, getCurrentTime, getPlaylistEnd, logger, mkdir } from "./utils";
 import { translate } from "bing-translate-api";
-import { REGEXP_TAGS, TASK_INTERVAL } from "./constant";
-import type { Channel, VideoInfo } from "upload_log.json";
+import { CONFIG_PATH, REGEXP_TAGS, TASK_INTERVAL } from "./constant";
 
-export interface IChangedInfo extends Omit<Channel, "videos"> {
-    video_info: VideoInfo;
+export interface IChangedInfo extends Omit<upload_log_type.Channel, "videos"> {
+    video_info: upload_log_type.VideoInfo;
 }
 
 //  读配置文件
@@ -16,7 +15,7 @@ export interface IChangedInfo extends Omit<Channel, "videos"> {
 //      -》继续轮训，与json信息做比较
 //  未更新返回false
 const checkChange = async () => {
-    const {config, configPath} = getConfigFile();
+    const {config} = getConfigFile();
     if (!config) return logger.error("配置文件读取失败");
 
     for (const channelItem of config.uploads) {
@@ -76,7 +75,7 @@ const checkChange = async () => {
             };
 
             channelItem.videos.unshift(changedInfo.video_info);
-            fs.writeFileSync(configPath, JSON.stringify(config), "utf-8");
+            fs.writeFileSync(CONFIG_PATH, JSON.stringify(config), "utf-8");
             logger.info("upload_log.json 写入成功");
             return changedInfo;
         }

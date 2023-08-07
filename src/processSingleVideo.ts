@@ -1,6 +1,7 @@
 import fs from "fs";
-import { download, executeTasksInOrder, logger, processThumbnail, processVideo, upload } from "./utils";
+import { download, executeTasksInOrder, logger, processThumbnail, processVideo } from "./utils";
 import { IChangedInfo } from "./listening";
+import { upload } from "./utils/upload";
 
 const downloadVideoJob = async (changedInfo: IChangedInfo) => {
     if (!changedInfo.skip_down_subs) {
