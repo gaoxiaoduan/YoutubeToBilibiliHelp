@@ -1,5 +1,5 @@
 import type { Page } from "puppeteer";
-import { delay, log } from "../../utils";
+import { delay, logger } from "../../utils";
 import fs from "fs";
 import type { IChangedInfo } from "../../listening";
 import path from "path";
@@ -16,7 +16,7 @@ export const uploadThumbnail = async (page: Page, changedInfo: IChangedInfo) => 
     await page.click(".bcc-dialog .cover-cut-header-tab-item:last-child > .text");
 
 
-    log("开始选择上传封面文件");
+    logger.info("开始选择上传封面文件");
     const [fileChooser] = await Promise.all([
         page.waitForFileChooser(),
         page.click(".cover-cut-footer-upload .bcc-upload .bcc-button"), // 上传文件按钮
@@ -29,14 +29,14 @@ export const uploadThumbnail = async (page: Page, changedInfo: IChangedInfo) => 
     try {
         const errorBox = await page.waitForSelector(".toaster-v2-wrp.error", {timeout: 1000 * 10});
         if (!errorBox) {
-            log("图片解析失败，请上传 960*600 尺寸以上图片 ->", outputThumbnail);
+            logger.info("图片解析失败，请上传 960*600 尺寸以上图片 ->", outputThumbnail);
             await page.click(".bcc-dialog .cover-cut-header-icon");
-            return
+            return;
         }
     } catch (e) {
-        log("图片解析成功");
+        logger.info("图片解析成功");
     }
 
     await page.click(".cover-cut-footer .bcc-button--primary");
-    log("封面上传成功", outputThumbnail);
+    logger.info("封面上传成功", outputThumbnail);
 };

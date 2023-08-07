@@ -1,6 +1,6 @@
-import { error } from "./log";
 import { getYTDL } from "./getYTDL";
 import { PROXY } from "../constant";
+import { logger } from "./logger";
 
 const ytdl = getYTDL();
 export const getPlaylistEnd = (userURL: string): Promise<string> => {
@@ -12,7 +12,7 @@ export const getPlaylistEnd = (userURL: string): Promise<string> => {
         ytdlChannel
             .on("error", (e: Error) => {
                 reject("");
-                error(`getPlaylistEnd错误\n`, e);
+                logger.error(`getPlaylistEnd错误\n`, e);
             });
 
 

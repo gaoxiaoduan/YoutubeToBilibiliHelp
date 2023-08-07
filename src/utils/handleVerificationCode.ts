@@ -1,8 +1,8 @@
 import fs from "fs";
 import axios from "axios";
-import { error, log } from "./log";
 import type { Page } from "puppeteer";
 import { delay } from "./delay";
+import { logger } from "./logger";
 
 const apiUrl = "http://api.ttshitu.com/predict";
 
@@ -16,7 +16,7 @@ const getPoints = async (imageFile: string): Promise<number[][]> => {
         image: base64data
     });
     if (!resultData.success) {
-        error("验证码识别失败", resultData.success);
+        logger.error("验证码识别失败", resultData.success);
         return [];
     }
     const point = resultData.data.result;
@@ -38,7 +38,7 @@ export const handleVerificationCode = async (page: Page, puppeteerScreenshotDir:
     try {
         const verificationCodeElement = await page.waitForSelector(".geetest_panel_next");
         if (verificationCodeElement) {
-            log("出现验证码");
+            logger.info("出现验证码");
             const verificationCodeSavePath = puppeteerScreenshotDir + "_verification_code.png";
             await verificationCodeElement.screenshot({
                 path: verificationCodeSavePath,
@@ -62,6 +62,6 @@ export const handleVerificationCode = async (page: Page, puppeteerScreenshotDir:
         const geetest_commit = await page.$(".geetest_commit");
         await geetest_commit?.click();
     } catch (e) {
-        log("未捕获到验证码:", e);
+        logger.info("未捕获到验证码:", e);
     }
 };

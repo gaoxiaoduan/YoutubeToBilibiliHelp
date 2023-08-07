@@ -1,12 +1,12 @@
 import path from "path";
 import { execCommand } from "./execCommand";
-import { log } from "./log";
 import fs from "fs";
+import { logger } from "./logger";
 
 
 export const processThumbnail = (dirPath: string, filename: string) => {
     return new Promise((resolve, reject) => {
-        log("-----封面格式转换阶段开始-----\n");
+        logger.info("-----封面格式转换阶段开始-----\n");
         const thumbnail = path.resolve(dirPath, filename + ".webp");
         const outputThumbnail = path.resolve(dirPath, filename + ".png");
         // 如果这个要转换格式的封面已经存在，跳过，表示之前已经转换过了

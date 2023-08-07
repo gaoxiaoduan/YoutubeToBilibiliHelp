@@ -1,4 +1,4 @@
-export * from "./log";
+export * from "./logger";
 export * from "./download";
 export * from "./mkdir";
 export * from "./processVideo";

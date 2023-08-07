@@ -1,5 +1,5 @@
 import fs from "fs";
-import { delay, error, getConfigFile, getCurrentTime, getPlaylistEnd, log, mkdir } from "./utils";
+import { delay, getConfigFile, getCurrentTime, getPlaylistEnd, logger, mkdir } from "./utils";
 import { translate } from "bing-translate-api";
 import { REGEXP_TAGS, TASK_INTERVAL } from "./constant";
 import type { Channel, VideoInfo } from "upload_log.json";
@@ -17,18 +17,18 @@ export interface IChangedInfo extends Omit<Channel, "videos"> {
 //  未更新返回false
 const checkChange = async () => {
     const {config, configPath} = getConfigFile();
-    if (!config) return error("配置文件读取失败");
+    if (!config) return logger.error("配置文件读取失败");
 
     for (const channelItem of config.uploads) {
         let playlistEndInfo: string;
         try {
             playlistEndInfo = await getPlaylistEnd(channelItem.user_url);
             if (playlistEndInfo === "") {
-                error(`最新视频信息获取失败：${channelItem.user_url}`);
+                logger.error(`最新视频信息获取失败：${channelItem.user_url}`);
                 continue;
             }
         } catch (e) {
-            error(`捕获到错误：视频获取阶段 `, e);
+            logger.error(`捕获到错误：视频获取阶段 `, e);
             continue;
         }
 
@@ -38,8 +38,8 @@ const checkChange = async () => {
         if (videos.length === 0 || videos[0].id !== playlistEndInfoObj.id) {
             const {id, title, uploader}: { id: string, title: string, uploader: string } = playlistEndInfoObj;
             const video_url = `https://www.youtube.com/watch?v=${id}`;
-            log(`发现频道有更新 --> ${uploader}:${title}`);
-            log(`更新视频的URL：${video_url}`);
+            logger.info(`发现频道有更新 --> ${uploader}:${title}`);
+            logger.info(`更新视频的URL：${video_url}`);
             const dirPath = mkdir(uploader);
             const filename = getCurrentTime("yyyy_MM_dd") + "__" + id;
 
@@ -77,7 +77,7 @@ const checkChange = async () => {
 
             channelItem.videos.unshift(changedInfo.video_info);
             fs.writeFileSync(configPath, JSON.stringify(config), "utf-8");
-            log("upload_log.json 写入成功");
+            logger.info("upload_log.json 写入成功");
             return changedInfo;
         }
     }
@@ -87,17 +87,17 @@ const checkChange = async () => {
 export const listening = async (): Promise<IChangedInfo> => {
     return new Promise(async resolve => {
         try {
-            log("开启一轮频道监测～");
+            logger.info("开启一轮频道监测～");
             const changedInfo = await checkChange();
             if (changedInfo) {
                 resolve(changedInfo);
             } else {
-                log(`等待${TASK_INTERVAL / 1000}s后开启新一轮监听`);
+                logger.info(`等待${TASK_INTERVAL / 1000}s后开启新一轮监听`);
                 await delay(TASK_INTERVAL);
                 listening().then(resolve);
             }
         } catch (e) {
-            error(`监听过程中捕获到错误,${TASK_INTERVAL / 1000}s后重新开启监听`, e);
+            logger.error(`监听过程中捕获到错误,${TASK_INTERVAL / 1000}s后重新开启监听`, e);
             await delay(TASK_INTERVAL);
             listening().then(resolve);
         }

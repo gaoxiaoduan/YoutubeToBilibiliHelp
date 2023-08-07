@@ -1,4 +1,4 @@
-import { delay, error, log } from "../../utils";
+import { delay, logger } from "../../utils";
 import type { Page } from "puppeteer";
 import * as fs from "fs";
 import path from "path";
@@ -20,10 +20,10 @@ export const login = async (page: Page) => {
     isDev && await page.screenshot({path: puppeteerScreenshotDir + "_1_login.png"});
 
     if (page.url() === "https://passport.bilibili.com/login") {
-        log("开始登录");
+        logger.info("开始登录");
         const {BliBli_USERNAME, BliBli_PASSWORD} = process.env;
         if (!(BliBli_USERNAME && BliBli_PASSWORD)) {
-            return error("B站账号密码不能为空");
+            return logger.error("B站账号密码不能为空");
         }
         await page.type("input[placeholder=\"请输入账号\"]", `${BliBli_USERNAME}`, {delay: 50});
         await page.type("input[placeholder=\"请输入密码\"]", `${BliBli_PASSWORD}`, {delay: 50});
@@ -44,7 +44,7 @@ export const login = async (page: Page) => {
                 waitUntil: "load"
             });
             if (page.url() === "https://member.bilibili.com/platform/home") {
-                log("登录成功");
+                logger.info("登录成功");
                 break;
             }
         }
@@ -55,9 +55,9 @@ export const login = async (page: Page) => {
         const cookiesString = JSON.stringify(cookies);
         fs.writeFileSync(cookiePath, cookiesString);
     } catch (e) {
-        error("cookie写入失败:", e);
+        logger.error("cookie写入失败:", e);
     }
 
-    log("成功进入创作中心");
+    logger.info("成功进入创作中心");
     isDev && await page.screenshot({path: puppeteerScreenshotDir + "_3_login.png"});
 };

@@ -1,6 +1,6 @@
-import { download, error, executeTasksInOrder, log, processThumbnail, processVideo, upload } from "./utils";
-import { IChangedInfo } from "./listening";
 import fs from "fs";
+import { download, executeTasksInOrder, logger, processThumbnail, processVideo, upload } from "./utils";
+import { IChangedInfo } from "./listening";
 
 const downloadVideoJob = async (changedInfo: IChangedInfo) => {
     if (!changedInfo.skip_down_subs) {
@@ -13,14 +13,14 @@ const processThumbnailJob = async (changedInfo: IChangedInfo) => {
     // 将webp格式的封面修改为png格式
     const {video_info} = changedInfo;
     const processThumbnailResult = await processThumbnail(video_info.dirPath, video_info.filename);
-    if (!processThumbnailResult) return error("封面格式转换失败");
+    if (!processThumbnailResult) return logger.error("封面格式转换失败");
 };
 
 const processVideoJob = async (changedInfo: IChangedInfo) => {
     const {video_info} = changedInfo;
     // 给视频加字幕
     const precessResult = await processVideo(video_info.dirPath, video_info.filename);
-    if (!precessResult) return error("视频处理未成功");
+    if (!precessResult) return logger.error("视频处理未成功");
 };
 
 const uploadJob = async (changedInfo: IChangedInfo) => {
@@ -32,7 +32,7 @@ const uploadJob = async (changedInfo: IChangedInfo) => {
 const clearFile = async (changedInfo: IChangedInfo) => {
     const {video_info} = changedInfo;
     fs.rmSync(video_info.dirPath, {recursive: true});
-    log("成功删除文件:", video_info.dirPath);
+    logger.info("成功删除文件:", video_info.dirPath);
 };
 
 export const processSingleVideo = async (changedInfo: IChangedInfo) => {
@@ -45,4 +45,4 @@ export const processSingleVideo = async (changedInfo: IChangedInfo) => {
     ];
 
     await executeTasksInOrder(jobs);
-}
+};

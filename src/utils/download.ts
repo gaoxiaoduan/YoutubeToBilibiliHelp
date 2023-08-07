@@ -1,4 +1,4 @@
-import { error, log, warn } from "./log";
+import { logger } from "./logger";
 import { getYTDL } from "./getYTDL";
 import { IChangedInfo } from "../listening";
 import path from "path";
@@ -16,23 +16,23 @@ function downloadVideoOrSubs(videoURL: string, dirPath: string, filename: string
             // 中文字幕可能会下载2个格式的，zh-Hans|zh-Hans-en
             commands = [`${videoURL}`, "--proxy", `${PROXY}`, "--write-auto-sub", "--write-sub", "--sub-lang", "en,zh-Hans,zh-Hans-en", "--sub-format", "vtt", "--skip-download", "-o", `${dirPath}/${filename}.%(ext)s`];
         }
-        log("下载命令：", commands.join(" "));
+        logger.info("下载命令：", commands.join(" "));
         const content = isDownSubs ? "字幕" : "视频";
 
         const downloadChannel = ytdl.exec(commands);
         downloadChannel.on("ytDlpEvent", (eventType: string, eventData: string) => {
             if (isDev) {
                 process.stdout.write("\x1b[1A\x1b[2K");
-                warn(`${content}-`, eventType, eventData);
+                logger.warn(`${content}-`, eventType, eventData);
             }
         })
             .on("error", (e: Error) => {
                 reject(false);
-                error(`${content}下载错误\n`, e);
+                logger.error(`${content}下载错误\n`, e);
             })
             .on("close", () => {
                 resolve(true);
-                log(`${content}下载完毕～\n`);
+                logger.info(`${content}下载完毕～\n`);
             });
     });
 }
@@ -48,20 +48,20 @@ export const download = async (changedInfo: IChangedInfo, isDownSubs: boolean = 
     if (!isDownSubs) {
         const outputFilePath = path.resolve(dirPath, filename + ".mp4");
         if (fs.existsSync(outputFilePath)) {
-            log(`-----${process} 已经存在-----\n`);
+            logger.info(`-----${process} 已经存在-----\n`);
             return true;
         }
     }
 
-    log(`-----[${process}]阶段开始-----\n`);
+    logger.info(`-----[${process}]阶段开始-----\n`);
 
     try {
         const res = await downloadVideoOrSubs(videoUrl, dirPath, filename, isDownSubs);
         if (!res) return false;
     } catch (e) {
-        error("视频下载过程中出错：", e);
+        logger.error("视频下载过程中出错：", e);
         return;
     }
-    log(`-----[${process}]阶段结束-----\n`);
+    logger.info(`-----[${process}]阶段结束-----\n`);
     return true;
 };

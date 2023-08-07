@@ -1,7 +1,7 @@
 import fs from "fs";
 import { translate } from "bing-translate-api";
 import { getCustomTimeList } from "./utils/getCustomTimeList";
-import { getCurrentTime, log, mkdir } from "./utils";
+import { getCurrentTime, logger, mkdir } from "./utils";
 import { processSingleVideo } from "./processSingleVideo";
 import { REGEXP_TAGS } from "./constant";
 import type { Config, customTimeChannel, VideoInfo } from "upload_log.json";
@@ -9,7 +9,7 @@ import type { IChangedInfo } from "./listening";
 
 export const handleCustomTime = async (channel: customTimeChannel, config: Config, configPath: string) => {
     let videoInfoList = await getCustomTimeList(channel);
-    if (!videoInfoList || !videoInfoList.length) return log("没有获取到视频信息");
+    if (!videoInfoList || !videoInfoList.length) return logger.info("没有获取到视频信息");
 
     for (const videoInfo of videoInfoList) {
         const {id, title, uploader}: { id: string, title: string, uploader: string } = videoInfo;
@@ -44,7 +44,7 @@ export const handleCustomTime = async (channel: customTimeChannel, config: Confi
             filename,
             uploadTitle,
             tags: translateTags,
-        }
+        };
         const changedInfo = {
             ...channel,
             video_info
@@ -56,6 +56,6 @@ export const handleCustomTime = async (channel: customTimeChannel, config: Confi
         // 视频发布成功,写入配置文件
         channel.videos.unshift(video_info);
         fs.writeFileSync(configPath, JSON.stringify(config), "utf-8");
-        log(`${video_info.uploadTitle} 发布成功,成功写入配置文件`);
+        logger.info(`${video_info.uploadTitle} 发布成功,成功写入配置文件`);
     }
-}
+};

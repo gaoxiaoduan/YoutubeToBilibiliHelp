@@ -1,14 +1,14 @@
 import * as path from "path";
 import * as fs from "fs";
 import { execCommand } from "./execCommand";
-import { log, warn } from "./log";
 import { processSubtitle } from "./processSubtitle";
+import { logger } from "./logger";
 
 // 给视频加字幕
 export const processVideo = (dirPath: string, filename: string) => {
     return new Promise(async (resolve, reject) => {
-        log("-----加字幕阶段开始-----\n");
-        log("processVideo:", dirPath, filename);
+        logger.info("-----加字幕阶段开始-----\n");
+        logger.info("processVideo:", dirPath, filename);
 
         const videoPath = path.resolve(dirPath, filename + ".mp4");
         const outputFile = path.resolve(dirPath, filename + ".output.mp4");
@@ -25,7 +25,7 @@ export const processVideo = (dirPath: string, filename: string) => {
 
 
         if (!fs.existsSync(enSubPath)) {
-            log("英语字幕不存在,视频不做加字幕的处理,将输出原视频");
+            logger.info("英语字幕不存在,视频不做加字幕的处理,将输出原视频");
             fs.copyFileSync(videoPath, outputFile);
             resolve(true);
             return;
@@ -56,10 +56,10 @@ export const processVideo = (dirPath: string, filename: string) => {
         // 给视频压制双字幕
         let command = `ffmpeg -i "${videoPath}" -vf "subtitles=${enSubPath}:force_style='${enStyle}',subtitles=${zhSubPath}:force_style='${zhStyle}'" -c:a copy "${outputFile}" -hide_banner`;
         if (zhSubPath === "") {
-            log("中文字幕不存在,只压制英语字幕");
+            logger.info("中文字幕不存在,只压制英语字幕");
             command = `ffmpeg -i "${videoPath}" -vf "subtitles=${enSubPath}:force_style='${zhStyle}'" -c:a copy "${outputFile}" -hide_banner`;
         }
-        warn(command);
+        logger.warn(command);
         execCommand(command, resolve, reject);
     });
 };

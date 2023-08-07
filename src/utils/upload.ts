@@ -1,14 +1,14 @@
 import puppeteer from "puppeteer";
-import { log } from "./log";
 import { isDev, puppeteerUserDataDir, USER_AGENT, waitForSelectorTimeout } from "../constant";
 import { information, login, uploadFile, uploadThumbnail } from "../browser/blibli";
 import { IChangedInfo } from "../listening";
+import { logger } from "./logger";
 
 
 export const upload = async (changedInfo: IChangedInfo) => {
-    log("-----自动上传阶段开始-----\n");
+    logger.info("-----自动上传阶段开始-----\n");
 
-    log("启动浏览器...\n");
+    logger.info("启动浏览器...\n");
     const browser = await puppeteer.launch({
         headless: isDev ? false : "new", // 默认为true，无头模式
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
