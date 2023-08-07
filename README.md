@@ -3,6 +3,11 @@
 > 目前仅支持B站：自动监听油管频道更新->自动加字幕->上传B站
 > 以下是win系统用户教程，unix系统使用同理，也可以等待更新unix文档
 
+## 开发计划
+
+-[ ] 拓展平台
+-[ ] 内置所需依赖
+
 ## 所需依赖：
 
 ### [git](https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%AE%89%E8%A3%85-Git)
@@ -203,6 +208,6 @@ Error: Could not find Chromium (rev. 1108766).
 ```ts
 // src/utils/upload.ts
 const browser = await puppeteer.launch({
-  executablePath: "/usr/bin/chromium",// 指定Chromium/Chrome的路径
+    executablePath: "/usr/bin/chromium",// 指定Chromium/Chrome的路径
 });
 ```

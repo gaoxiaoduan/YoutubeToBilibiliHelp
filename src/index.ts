@@ -1,11 +1,9 @@
+import "dotenv/config";
 import { error, getConfigFile, log } from "./utils";
 import { listening } from "./listening";
-import * as dotenv from "dotenv";
 import { TASK_INTERVAL } from "./constant";
 import { handleCustomTime } from "./handleCustomTime";
 import { processSingleVideo } from "./processSingleVideo";
-
-dotenv.config();
 
 async function main() {
     log("项目启动～🚀");
