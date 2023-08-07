@@ -33,8 +33,12 @@ export const uploadFile = async (page: Page, changedInfo: IChangedInfo) => {
     log("文件选择成功：", outputFile);
 
     await delay(1000 * 10);
-    const tipDialogCloseBtn = await page.$(".videoup-notification-dialog .bcc-dialog__footer > button");
-    tipDialogCloseBtn && await tipDialogCloseBtn?.click();
+    try {
+        const tipDialogCloseBtn = await page.$(".videoup-notification-dialog .bcc-dialog__footer > button");
+        await tipDialogCloseBtn?.click();
+    } catch (e) {
+        log("提示弹窗不存在");
+    }
 
     isDev && await page.screenshot({path: puppeteerScreenshotDir + "_1_upload_process.png"});
 

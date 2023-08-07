@@ -11,7 +11,7 @@ export const upload = async (changedInfo: IChangedInfo) => {
     log("启动浏览器...\n");
     const browser = await puppeteer.launch({
         headless: isDev ? false : "new", // 默认为true，无头模式
-        args: ["--no-sandbox"],
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
         slowMo: 250,
         userDataDir: puppeteerUserDataDir,
         protocolTimeout: waitForSelectorTimeout
