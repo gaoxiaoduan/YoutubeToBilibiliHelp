@@ -1,12 +1,13 @@
 import "dotenv/config";
 import { getConfigFile, logger } from "./utils";
 import { listening } from "./listening";
-import { CONFIG_PATH, TASK_INTERVAL } from "./constant";
+import { CONFIG_PATH, isDev, TASK_INTERVAL } from "./constant";
 import { handleCustomTime } from "./handleCustomTime";
 import { processSingleVideo } from "./processSingleVideo";
 
 async function main() {
     logger.info("项目启动～🚀");
+    logger.info(`当前环境为：${isDev ? "开发环境" : "正式环境"}`);
 
     // 读取配置文件
     const {config} = getConfigFile();
