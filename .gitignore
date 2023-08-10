@@ -5,7 +5,7 @@ temp/
 
 videos/**
 logs/**
-!logs
+!logs/.gitkeep
 !videos!
 
 .env
