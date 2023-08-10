@@ -1,5 +1,7 @@
 <h2 align="center">从油管自动化搬运视频到X平台</h2>
+
 > 目前仅支持B站：自动监听油管频道更新->自动加字幕->上传B站
+
 
 <div align="center">
   <span>Docker教程 | </span>
@@ -16,8 +18,6 @@
 
 -[ ] 拓展平台
 
----
-
 ## 下载项目代码
 
 ```bash
@@ -27,14 +27,10 @@ git clone https://github.com/gaoxiaoduan/YoutubeToBilibiliHelp.git
 cd YoutubeToBilibiliHelp
 ```
 
----
-
 ## 修改自己所对应的配置文件
 
 - 可参考[Win系统教程](https://github.com/gaoxiaoduan/YoutubeToBilibiliHelp/blob/main/docs/document-win.md)中的配置信息进行修改
 - 提前修改好对应的`PROXY`网络代理地址，否则网络会走不通
-
----
 
 ## 使用Docker运行
 

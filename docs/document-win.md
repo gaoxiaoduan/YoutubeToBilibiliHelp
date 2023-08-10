@@ -2,8 +2,6 @@
 
 > 以下是win系统用户教程，unix系统使用同理
 
---- 
-
 ## 所需依赖：
 
 - [git](https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%AE%89%E8%A3%85-Git)
@@ -29,9 +27,7 @@ SET PUPPETEER_SKIP_DOWNLOAD='true' #win下使用
 export PUPPETEER_SKIP_DOWNLOAD='true' #linux下使用
 ```
 
---- 
-
-### 安装yt-dlp
+## 安装yt-dlp
 
 > 油管视频下载工具
 >
@@ -52,9 +48,7 @@ export PUPPETEER_SKIP_DOWNLOAD='true' #linux下使用
 - 验证环境变量是否添加成功
   ![image.png](https://cdn.jsdelivr.net/gh/gaoxiaoduan/picGoImg@main/images/202305251130475.png)
 
---- 
-
-### 安装ffmpeg
+## 安装ffmpeg
 
 > 一个视频处理工具
 >
@@ -66,8 +60,6 @@ export PUPPETEER_SKIP_DOWNLOAD='true' #linux下使用
   ![image.png](https://cdn.jsdelivr.net/gh/gaoxiaoduan/picGoImg@main/images/202305251130077.png)
 - 测试是否生效
   ![image.png](https://cdn.jsdelivr.net/gh/gaoxiaoduan/picGoImg@main/images/202305251130083.png)
-
---- 
 
 ## 配置油管对应的监听频道
 
@@ -141,8 +133,6 @@ TJ_PASSWORD="xxx" #打码平台密码
   ]
 }
 ```
-
----
 
 ## 根据自定义日期,进行搬运视频
 
