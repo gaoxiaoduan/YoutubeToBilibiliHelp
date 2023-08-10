@@ -1,10 +1,7 @@
 {
   "name": "ytToX",
-  "script": "temp/index.js",
+  "script": "dist/index.js",
   "instances": 1,
-  "env": {
-    "NODE_ENV": "production"
-  },
   "log_rotate_interval": "1d",
   "log_max_size": "10M",
   "log_date_format": "MM-DD HH:mm:ss",
