@@ -1,4 +1,4 @@
-declare namespace upload_log_type {
+declare namespace uploadConfigType {
     interface VideoInfo {
         id: string;
         video_url: string;

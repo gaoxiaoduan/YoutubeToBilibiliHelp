@@ -12,7 +12,7 @@ export const OUTPUT_DIR = path.resolve("./videos"); // 下载目录
 
 export const COOKIE_PATH = path.resolve("./cookies.json"); // cookie文件路径
 
-export const CONFIG_PATH = path.resolve("./upload_log.json"); // 配置文件路径
+export const CONFIG_PATH = path.resolve("./upload.config.json"); // 配置文件路径
 
 export const puppeteerUserDataDir = "puppeteer/user/data"; // puppeteer用户数据目录
 

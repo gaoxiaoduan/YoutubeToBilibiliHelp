@@ -1,7 +1,8 @@
 import fs from "fs";
-import { download, executeTasksInOrder, logger, processThumbnail, processVideo } from "./utils";
+import { executeTasksInOrder, logger, videoWithSubtitle } from "./utils";
 import { IChangedInfo } from "./listening";
-import { upload } from "./utils/upload";
+import { download, processThumbnail } from "./processVideo";
+import { runBrowser } from "./browser";
 
 const downloadVideoJob = async (changedInfo: IChangedInfo) => {
     if (!changedInfo.skip_down_subs) {
@@ -20,13 +21,13 @@ const processThumbnailJob = async (changedInfo: IChangedInfo) => {
 const processVideoJob = async (changedInfo: IChangedInfo) => {
     const {video_info} = changedInfo;
     // 给视频加字幕
-    const precessResult = await processVideo(video_info.dirPath, video_info.filename);
+    const precessResult = await videoWithSubtitle(video_info.dirPath, video_info.filename);
     if (!precessResult) return logger.error("视频处理未成功");
 };
 
 const uploadJob = async (changedInfo: IChangedInfo) => {
     // 开始自动上传
-    await upload(changedInfo);
+    await runBrowser(changedInfo);
 };
 
 // 清理上传成功的文件

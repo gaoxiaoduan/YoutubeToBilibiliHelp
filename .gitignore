@@ -11,7 +11,7 @@ logs/**
 .env
 puppeteer/
 
-upload_log.json
+upload.config.json
 cookies.json
 
 ytdl-logger.txt

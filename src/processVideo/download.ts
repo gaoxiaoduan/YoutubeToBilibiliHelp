@@ -1,8 +1,7 @@
-import { logger } from "./logger";
-import { getYTDL } from "./getYTDL";
-import { IChangedInfo } from "../listening";
 import path from "path";
 import fs from "fs";
+import { getYTDL, logger } from "../utils";
+import { IChangedInfo } from "../listening";
 import { isDev, PROXY } from "../constant";
 
 const ytdl = getYTDL();
@@ -37,6 +36,7 @@ function downloadVideoOrSubs(videoURL: string, dirPath: string, filename: string
     });
 }
 
+// 下载视频
 export const download = async (changedInfo: IChangedInfo, isDownSubs: boolean = false) => {
     const process = isDownSubs ? "字幕" : "视频";
     const {

@@ -1,10 +1,10 @@
+import { delay, getConfigFile, getPlaylistEnd, logger } from "./utils";
+import { CONFIG_PATH, TASK_INTERVAL } from "./constant";
 import fs from "fs";
-import { delay, getConfigFile, getCurrentTime, getPlaylistEnd, logger, mkdir } from "./utils";
-import { translate } from "bing-translate-api";
-import { CONFIG_PATH, REGEXP_TAGS, TASK_INTERVAL } from "./constant";
+import { configChannel } from "./common";
 
-export interface IChangedInfo extends Omit<upload_log_type.Channel, "videos"> {
-    video_info: upload_log_type.VideoInfo;
+export interface IChangedInfo extends Omit<uploadConfigType.Channel, "videos"> {
+    video_info: uploadConfigType.VideoInfo;
 }
 
 //  读配置文件
@@ -15,10 +15,9 @@ export interface IChangedInfo extends Omit<upload_log_type.Channel, "videos"> {
 //      -》继续轮训，与json信息做比较
 //  未更新返回false
 const checkChange = async () => {
-    const {config} = getConfigFile();
-    if (!config) return logger.error("配置文件读取失败");
+    const config = getConfigFile();
 
-    for (const channelItem of config.uploads) {
+    for (const channelItem of config?.uploads || []) {
         let playlistEndInfo: string;
         try {
             playlistEndInfo = await getPlaylistEnd(channelItem.user_url);
@@ -36,47 +35,12 @@ const checkChange = async () => {
         const videos = channelItem.videos;
         if (videos.length === 0 || videos[0].id !== playlistEndInfoObj.id) {
             const {id, title, uploader}: { id: string, title: string, uploader: string } = playlistEndInfoObj;
-            const video_url = `https://www.youtube.com/watch?v=${id}`;
-            logger.info(`发现频道有更新 --> ${uploader}:${title}`);
-            logger.info(`更新视频的URL：${video_url}`);
-            const dirPath = mkdir(uploader);
-            const filename = getCurrentTime("yyyy_MM_dd") + "__" + id;
 
-            const tags = title.match(REGEXP_TAGS)?.map((t: string) => t && t?.slice(1)) || [];
-            // "科普动画", "看动画学英语", "趣味故事", "科普一下", "英语口语", "动画英语"
-            const translateTags: string[] = [...(channelItem?.prefix_tags || ["vlog"])];
-            const tagLessTitle = title.replace(REGEXP_TAGS, "");
-            let uploadTitle = channelItem.publish_prefix || "";
-
-            if (!channelItem.skip_translation_title) {
-                if (tags && tags.length) {
-                    for (const tag of tags) {
-                        const translateTag = await translate(tag, null, "zh-Hans");
-                        translateTags.push(translateTag.translation);
-                    }
-                }
-                const translationTitle = await translate(tagLessTitle, null, "zh-Hans");
-                uploadTitle += translationTitle.translation?.slice(0, 80) || tagLessTitle || "文件名出问题啦～";
-            } else {
-                uploadTitle += tagLessTitle || "文件名出问题啦～";
-            }
-
-            const changedInfo: IChangedInfo = {
-                ...channelItem,
-                video_info: {
-                    id,
-                    video_url,
-                    title,
-                    dirPath,
-                    filename,
-                    uploadTitle,
-                    tags: translateTags,
-                }
-            };
+            const changedInfo = await configChannel(channelItem, id, title, uploader);
 
             channelItem.videos.unshift(changedInfo.video_info);
             fs.writeFileSync(CONFIG_PATH, JSON.stringify(config), "utf-8");
-            logger.info("upload_log.json 写入成功");
+            logger.info("upload.config.json 写入成功");
             return changedInfo;
         }
     }
@@ -88,6 +52,7 @@ export const listening = async (): Promise<IChangedInfo> => {
         try {
             logger.info("开启一轮频道监测～");
             const changedInfo = await checkChange();
+            console.log(changedInfo);
             if (changedInfo) {
                 resolve(changedInfo);
             } else {

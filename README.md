@@ -45,7 +45,7 @@ docker build -t youtube_to_bilibili_help .
 
 ```bash
 # 启动
-docker run -d --name youtube --net=host -v <本机upload_log.json文件>:/usr/app/upload_log.json youtube_to_bilibili_help
+docker run -d --name youtube --net=host -v <本机upload_log.json文件>:/usr/app/upload.config.json youtube_to_bilibili_help
 
 # 停止
 docker stop youtube

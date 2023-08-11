@@ -1,9 +1,10 @@
 import path from "path";
-import { execCommand } from "./execCommand";
 import fs from "fs";
-import { logger } from "./logger";
+import { execCommand } from "../utils/execCommand";
+import { logger } from "../utils";
 
 
+// 处理视频封面
 export const processThumbnail = (dirPath: string, filename: string) => {
     return new Promise((resolve, reject) => {
         logger.info("-----封面格式转换阶段开始-----\n");

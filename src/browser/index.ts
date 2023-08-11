@@ -1,11 +1,11 @@
 import puppeteer from "puppeteer";
 import { isDev, puppeteerUserDataDir, USER_AGENT, waitForSelectorTimeout } from "../constant";
-import { information, login, uploadFile, uploadThumbnail } from "../browser/blibli";
+import { information, login, uploadFile, uploadThumbnail } from "./blibli";
 import { IChangedInfo } from "../listening";
-import { logger } from "./logger";
+import { logger } from "../utils";
 
 
-export const upload = async (changedInfo: IChangedInfo) => {
+export const runBrowser = async (changedInfo: IChangedInfo) => {
     logger.info("-----自动上传阶段开始-----\n");
 
     logger.info("启动浏览器...\n");

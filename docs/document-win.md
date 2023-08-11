@@ -63,7 +63,7 @@ export PUPPETEER_SKIP_DOWNLOAD='true' #linux下使用
 
 ## 配置油管对应的监听频道
 
-- 注意：.env.template和upload_log.template.json都是模版文件
+- 注意：.env.template和upload.config.template.json都是模版文件
 - 注意：需要删除template后缀使用
 
 
@@ -79,7 +79,7 @@ TJ_USERNAME="xxx" #打码平台账号
 TJ_PASSWORD="xxx" #打码平台密码
 ```
 
-2. `upload_log.json`配置文件
+2. `upload.config.json`配置文件
 
 - 主要功能：监听用户频道信息
 - json文件有多个配置字段，具体可以查看`typing.d.ts`类型定义

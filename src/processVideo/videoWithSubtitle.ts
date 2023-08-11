@@ -1,11 +1,11 @@
 import * as path from "path";
 import * as fs from "fs";
-import { execCommand } from "./execCommand";
-import { processSubtitle } from "./processSubtitle";
-import { logger } from "./logger";
+import { execCommand } from "../utils/execCommand";
+import { processSubtitle } from "../utils/processSubtitle";
+import { logger } from "../utils";
 
 // 给视频加字幕
-export const processVideo = (dirPath: string, filename: string) => {
+export const videoWithSubtitle = (dirPath: string, filename: string) => {
     return new Promise(async (resolve, reject) => {
         logger.info("-----加字幕阶段开始-----\n");
         logger.info("processVideo:", dirPath, filename);
