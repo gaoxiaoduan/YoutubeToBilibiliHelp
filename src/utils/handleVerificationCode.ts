@@ -1,8 +1,8 @@
 import fs from "fs";
 import axios from "axios";
 import type { Page } from "puppeteer";
-import { delay } from "./delay";
 import { logger } from "./logger";
+import { delay } from "./time";
 
 const apiUrl = "http://api.ttshitu.com/predict";
 
@@ -45,7 +45,7 @@ export const handleVerificationCode = async (page: Page, puppeteerScreenshotDir:
             });
 
             const points = await getPoints(verificationCodeSavePath);
-            if (points.length === 0) return;
+            if (points.length === 0) return false;
 
             for (const [x, y] of points) {
                 await delay(1000);
@@ -64,4 +64,5 @@ export const handleVerificationCode = async (page: Page, puppeteerScreenshotDir:
     } catch (e) {
         logger.info("未捕获到验证码:", e);
     }
+    return true;
 };

@@ -37,6 +37,9 @@ devDependencies:
   '@rollup/plugin-typescript':
     specifier: ^11.1.2
     version: 11.1.2(rollup@3.27.2)(typescript@5.0.4)
+  '@types/fluent-ffmpeg':
+    specifier: ^2.1.21
+    version: 2.1.21
   '@types/node':
     specifier: ^18.15.11
     version: 18.15.11
@@ -186,6 +189,12 @@ packages:
 
   /@types/estree@1.0.1:
     resolution: { integrity: sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA== }
+    dev: true
+
+  /@types/fluent-ffmpeg@2.1.21:
+    resolution: { integrity: sha512-+n3dy/Tegt6n+YwGZUiGq6i8Jrnt8+MoyPiW1L6J5EWUl7GSt18a/VyReecfCsvTTNBXNMIKOMHDstiQM8nJLA== }
+    dependencies:
+      '@types/node': 18.15.11
     dev: true
 
   /@types/http-cache-semantics@4.0.1:

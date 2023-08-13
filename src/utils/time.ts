@@ -1,3 +1,5 @@
+export const delay = (time: number = 1000) => new Promise(resolve => setTimeout(resolve, time));
+
 export const getCurrentTime = (format = "yyyy-MM-dd hh:mm:ss"): string => {
     const now = new Date();
     const year = now.getFullYear();

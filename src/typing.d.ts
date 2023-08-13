@@ -7,6 +7,7 @@ declare namespace uploadConfigType {
         filename: string;
         uploadTitle: string;
         tags: string[];
+        platform: string[];
     }
 
     interface Channel {

@@ -3,7 +3,7 @@
   "scripts": {
     "build": "rollup -c --environment BUILD:production",
     "build:dev": "rollup -c --environment BUILD:development",
-    "dev": "node ./dist/index.js"
+    "dev": "npm run build:dev && node ./dist/index.js"
   },
   "type": "module",
   "dependencies": {
@@ -19,6 +19,7 @@
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-typescript": "^11.1.2",
+    "@types/fluent-ffmpeg": "^2.1.21",
     "@types/node": "^18.15.11",
     "rollup": "^3.27.2",
     "rollup-plugin-node-externals": "^6.1.1",

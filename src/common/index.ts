@@ -41,6 +41,7 @@ export const configChannel = async (channel: uploadConfigType.Channel | uploadCo
             dirPath,
             filename,
             uploadTitle,
+            platform: [],
             tags: translateTags,
         }
     };

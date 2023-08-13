@@ -1,7 +1,7 @@
 import { logger } from "./logger";
-import { getYTDL } from "./getYTDL";
-import { getCurrentTime } from "./getCurrentTime";
 import { PROXY } from "../constant";
+import { getYTDL } from "./YTDL";
+import { getCurrentTime } from "./time";
 
 const ytdl = getYTDL();
 

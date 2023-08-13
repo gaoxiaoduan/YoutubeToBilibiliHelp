@@ -1,8 +1,8 @@
+import fs from "fs";
+import path from "path";
 import type { Page } from "puppeteer";
 import { delay, logger } from "../../utils";
-import fs from "fs";
 import type { IChangedInfo } from "../../listening";
-import path from "path";
 
 export const uploadThumbnail = async (page: Page, changedInfo: IChangedInfo) => {
     if (changedInfo?.skip_upload_thumbnail) return;

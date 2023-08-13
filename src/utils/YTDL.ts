@@ -1,9 +1,19 @@
-import { getYTDL } from "./getYTDL";
+import YTDlpWrap from "yt-dlp-wrap";
 import { PROXY } from "../constant";
 import { logger } from "./logger";
 
-const ytdl = getYTDL();
+let ytdl: YTDlpWrap;
+export const getYTDL = () => {
+    if (!ytdl) {
+        // @ts-ignore
+        ytdl = new YTDlpWrap.default();
+        return ytdl;
+    }
+    return ytdl;
+};
+
 export const getPlaylistEnd = (userURL: string): Promise<string> => {
+    const ytdl = getYTDL();
     return new Promise((resolve, reject) => {
         // 跳过下载，只获取最新一条的视频信息
         const command = [`${userURL}`, "--proxy", `"${PROXY}"`, "--skip-download", "--print-json", "--playlist-end", "1"];

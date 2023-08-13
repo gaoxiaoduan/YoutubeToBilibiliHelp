@@ -60,7 +60,7 @@ export const download = async (changedInfo: IChangedInfo, isDownSubs: boolean = 
         if (!res) return false;
     } catch (e) {
         logger.error("视频下载过程中出错：", e);
-        return;
+        return false;
     }
     logger.info(`-----[${process}]阶段结束-----\n`);
     return true;

@@ -1,9 +1,8 @@
 import { delay, getConfigFile, getPlaylistEnd, logger } from "./utils";
-import { CONFIG_PATH, TASK_INTERVAL } from "./constant";
-import fs from "fs";
+import { TASK_INTERVAL } from "./constant";
 import { configChannel } from "./common";
 
-export interface IChangedInfo extends Omit<uploadConfigType.Channel, "videos"> {
+export interface IChangedInfo extends uploadConfigType.Channel {
     video_info: uploadConfigType.VideoInfo;
 }
 
@@ -35,13 +34,7 @@ const checkChange = async () => {
         const videos = channelItem.videos;
         if (videos.length === 0 || videos[0].id !== playlistEndInfoObj.id) {
             const {id, title, uploader}: { id: string, title: string, uploader: string } = playlistEndInfoObj;
-
-            const changedInfo = await configChannel(channelItem, id, title, uploader);
-
-            channelItem.videos.unshift(changedInfo.video_info);
-            fs.writeFileSync(CONFIG_PATH, JSON.stringify(config), "utf-8");
-            logger.info("upload.config.json 写入成功");
-            return changedInfo;
+            return await configChannel(channelItem, id, title, uploader);
         }
     }
     return false;
@@ -52,7 +45,6 @@ export const listening = async (): Promise<IChangedInfo> => {
         try {
             logger.info("开启一轮频道监测～");
             const changedInfo = await checkChange();
-            console.log(changedInfo);
             if (changedInfo) {
                 resolve(changedInfo);
             } else {

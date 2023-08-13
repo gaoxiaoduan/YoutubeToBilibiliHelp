@@ -1,5 +1,5 @@
 import type { Page } from "puppeteer";
-import { delay, logger } from "../../utils";
+import { delay, logger, setConfigFile } from "../../utils";
 import { isDev, puppeteerScreenshotDir } from "../../constant";
 import { handleVerificationCode } from "../../utils/handleVerificationCode";
 import { IChangedInfo } from "../../listening";
@@ -54,8 +54,10 @@ export const information = async (page: Page, changedInfo: IChangedInfo) => {
     // 这个阶段可能会跳出验证码!
     isDev && await page.screenshot({path: puppeteerScreenshotDir + "_1_eng.png"});
 
-    await handleVerificationCode(page, puppeteerScreenshotDir);
-
+    const codeResult = await handleVerificationCode(page, puppeteerScreenshotDir);
+    if (!codeResult) return false;
     logger.info("投稿成功:", uploadTitle);
+
+    await setConfigFile(changedInfo, "BZ");
     await delay(1000 * 5);
 };

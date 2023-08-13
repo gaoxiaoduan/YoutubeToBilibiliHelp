@@ -1,6 +1,6 @@
+import fs from "fs";
 import { delay, logger } from "../../utils";
 import type { Page } from "puppeteer";
-import * as fs from "fs";
 import { COOKIE_PATH, isDev, puppeteerScreenshotDir } from "../../constant";
 import { handleVerificationCode } from "../../utils/handleVerificationCode";
 
@@ -18,7 +18,7 @@ export const login = async (page: Page) => {
     isDev && await page.screenshot({path: puppeteerScreenshotDir + "_1_login.png"});
 
     if (page.url() === "https://passport.bilibili.com/login") {
-        logger.info("开始登录");
+        // TODO:扫码登录
         const {BliBli_USERNAME, BliBli_PASSWORD} = process.env;
         if (!(BliBli_USERNAME && BliBli_PASSWORD)) {
             return logger.error("B站账号密码不能为空");

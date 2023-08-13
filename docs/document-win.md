@@ -83,7 +83,7 @@ TJ_PASSWORD="xxx" #打码平台密码
 
 - 主要功能：监听用户频道信息
 - json文件有多个配置字段，具体可以查看`typing.d.ts`类型定义
-- 但是只有几个字段是监听所必要的，下面用*号标记出来，也可以直接使用upload_log.template.json
+- 但是只有几个字段是监听所必要的，下面用*号标记出来，也可以直接使用upload.config.template.json
 - ⚠️注意：这个文件项目中是不存在的，需要自己创建
 
 ```json3
@@ -136,7 +136,7 @@ TJ_PASSWORD="xxx" #打码平台密码
 
 ## 根据自定义日期,进行搬运视频
 
-- 在upload_log.json 配置文件中添加`custom_time_channel`对象信息
+- 在`upload.config.json` 配置文件中添加`custom_time_channel`对象信息
 - 与`uploads`配置主要的区别是多了两个字段，`date_after`和`date_before`
 - `date_after`：自定义日期，搬运该日期之后的视频
 - `date_before`：自定义日期，搬运该日期之前的视频

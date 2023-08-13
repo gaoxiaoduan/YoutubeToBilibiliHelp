@@ -1,5 +1,5 @@
 import fs from "fs";
-
+import path from "path";
 
 /**
  * 将双行字幕变成单行字幕
@@ -25,4 +25,14 @@ export const processSubtitle: (subtitlePath: string) => Promise<string> = (subti
             resolve(subtitlePath);
         }
     );
+};
+
+
+// C:\xxx\project\YoutubeToBilibiliHelp\videos\SeanAslam\2023_05_13__mqoCtTvTO1U.en.vtt
+// 转换后
+// 'C\:/xxx/project/YoutubeToBilibiliHelp/videos/Sean Aslam/2023_05_13__mqoCtTvTO1U.en.vtt'
+export const processWinPath = (pathString: string): string => {
+    let normalizedPath = pathString.split(path.sep).join("/");
+    normalizedPath = normalizedPath.replace(":", "\\:");
+    return `\'${normalizedPath}\'`;
 };
