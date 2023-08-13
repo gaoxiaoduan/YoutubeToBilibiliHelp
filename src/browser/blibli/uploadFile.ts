@@ -1,14 +1,18 @@
 import path from "path";
+import fs from "fs";
 import { delay, logger } from "../../utils";
 import { isDev, puppeteerScreenshotDir, waitForSelectorTimeout } from "../../constant";
 import type { Page } from "puppeteer";
 import type { IChangedInfo } from "../../listening";
 
-
 export const uploadFile = async (page: Page, changedInfo: IChangedInfo) => {
     const {dirPath, filename} = changedInfo.video_info;
 
     const outputFile = path.resolve(dirPath, filename + ".output.mp4");
+    if (!fs.existsSync(outputFile)) {
+        logger.error(`输入文件不存在:${outputFile}`);
+        return false;
+    }
 
     const nav_upload_btn = await page.$("#nav_upload_btn");
     await nav_upload_btn?.click(); // 进入上传页面按钮
@@ -16,7 +20,8 @@ export const uploadFile = async (page: Page, changedInfo: IChangedInfo) => {
     await page.waitForNavigation(); // 等待路由跳转
 
     if (page.url() !== "https://member.bilibili.com/platform/upload/video/") {
-        return logger.error("未能成功进入视频上传页面");
+        logger.error("未能成功进入视频上传页面");
+        return false;
     }
     logger.info("进入视频上传页面");
 
@@ -44,9 +49,13 @@ export const uploadFile = async (page: Page, changedInfo: IChangedInfo) => {
 
     // 等待上传成功，再填信息
     const success = await page.waitForSelector(".success", {timeout: waitForSelectorTimeout});
-    if (!success) return logger.error("未能上传成功");
+    if (!success) {
+        logger.error("未能上传成功");
+        return false;
+    }
 
     isDev && await page.screenshot({path: puppeteerScreenshotDir + "_2_upload_process.png"});
 
     logger.info("文件上传成功，开始填写信息");
+    return true;
 };

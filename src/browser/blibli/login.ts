@@ -21,7 +21,8 @@ export const login = async (page: Page) => {
         // TODO:扫码登录
         const {BliBli_USERNAME, BliBli_PASSWORD} = process.env;
         if (!(BliBli_USERNAME && BliBli_PASSWORD)) {
-            return logger.error("B站账号密码不能为空");
+            logger.error("B站账号密码不能为空");
+            return false;
         }
         await page.type("input[placeholder=\"请输入账号\"]", `${BliBli_USERNAME}`, {delay: 50});
         await page.type("input[placeholder=\"请输入密码\"]", `${BliBli_PASSWORD}`, {delay: 50});
@@ -54,8 +55,10 @@ export const login = async (page: Page) => {
         fs.writeFileSync(COOKIE_PATH, cookiesString);
     } catch (e) {
         logger.error("cookie写入失败:", e);
+        return false;
     }
 
     logger.info("成功进入创作中心");
     isDev && await page.screenshot({path: puppeteerScreenshotDir + "_3_login.png"});
+    return true;
 };

@@ -60,4 +60,5 @@ export const information = async (page: Page, changedInfo: IChangedInfo) => {
 
     await setConfigFile(changedInfo, "BZ");
     await delay(1000 * 5);
+    return true;
 };

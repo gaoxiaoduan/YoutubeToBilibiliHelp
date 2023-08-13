@@ -5,10 +5,10 @@ import { delay, logger } from "../../utils";
 import type { IChangedInfo } from "../../listening";
 
 export const uploadThumbnail = async (page: Page, changedInfo: IChangedInfo) => {
-    if (changedInfo?.skip_upload_thumbnail) return;
+    if (changedInfo?.skip_upload_thumbnail) return true;
     const {dirPath, filename} = changedInfo.video_info;
     const outputThumbnail = path.resolve(dirPath, filename + ".png");
-    if (!fs.existsSync(outputThumbnail)) return;
+    if (!fs.existsSync(outputThumbnail)) return true;
 
     await delay(1000 * 15);
     await page.click(".cover-upload-btn span:first-child");
@@ -31,7 +31,7 @@ export const uploadThumbnail = async (page: Page, changedInfo: IChangedInfo) => 
         if (!errorBox) {
             logger.info("图片解析失败，请上传 960*600 尺寸以上图片 ->", outputThumbnail);
             await page.click(".bcc-dialog .cover-cut-header-icon");
-            return;
+            return false;
         }
     } catch (e) {
         logger.info("图片解析成功");
@@ -39,4 +39,5 @@ export const uploadThumbnail = async (page: Page, changedInfo: IChangedInfo) => 
 
     await page.click(".cover-cut-footer .bcc-button--primary");
     logger.info("封面上传成功", outputThumbnail);
+    return true;
 };

@@ -27,7 +27,7 @@ export const blibliTasks = [
 interface ITasks {
     taskName: string; // 任务名
     url?: string; // 地址
-    taskFn: (page: Page, changedInfo: IChangedInfo) => Promise<void | boolean>; // 任务函数
+    taskFn: (page: Page, changedInfo: IChangedInfo) => Promise<boolean>; // 任务函数
 }
 
 export const runBrowser = async (tasks: ITasks[], changedInfo: IChangedInfo, isClose: boolean = true) => {
@@ -58,7 +58,8 @@ export const runBrowser = async (tasks: ITasks[], changedInfo: IChangedInfo, isC
         const {taskName, url, taskFn} = task;
         logger.info(`开始执行任务：${taskName}`);
         url && await page.goto(url);
-        await taskFn(page, changedInfo);
+        const result = await taskFn(page, changedInfo);
+        if (!result) break;
     }
 
     // 关闭浏览器
