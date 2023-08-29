@@ -8,16 +8,14 @@ RUN npm install -g pnpm
 # 安装 pm2
 RUN npm install -g pm2
 
-# 安装curl
-RUN apk add --no-cache curl
-
+# 安装 ffmpeg
 RUN apk add --no-cache ffmpeg
 
+# 安装python3
 RUN apk add --no-cache python3
 
 # 安装yt-dlp
-RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp && \
-    chmod a+rx /usr/local/bin/yt-dlp
+RUN apk add --no-cache yt-dlp
 
 
 # 设置工作目录
