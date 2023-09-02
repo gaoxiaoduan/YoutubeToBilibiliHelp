@@ -29,7 +29,7 @@ cd YoutubeToBilibiliHelp
 ## 修改自己所对应的配置文件
 
 - 可参考[Win系统教程](https://github.com/gaoxiaoduan/YoutubeToBilibiliHelp/blob/main/docs/document-win.md)中的配置信息进行修改
-- 提前修改好对应的`PROXY`网络代理地址，否则网络会走不通
+- ⚠️提前修改好对应的`PROXY`网络代理地址，否则网络会走不通
 
 ## 使用Docker运行
 

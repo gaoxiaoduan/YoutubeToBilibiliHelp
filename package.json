@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "module": "./dist/index.js",
   "scripts": {
     "build": "rollup -c --environment BUILD:production",
