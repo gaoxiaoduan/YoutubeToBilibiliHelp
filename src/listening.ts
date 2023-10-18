@@ -19,6 +19,7 @@ const checkChange = async () => {
     for (const channelItem of config?.uploads || []) {
         let playlistEndInfo: string;
         try {
+            await delay(1000 * 10);
             playlistEndInfo = await getPlaylistEnd(channelItem.user_url);
             if (playlistEndInfo === "") {
                 logger.error(`最新视频信息获取失败：${channelItem.user_url}`);
