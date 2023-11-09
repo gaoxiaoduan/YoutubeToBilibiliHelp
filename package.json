@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "module": "./dist/index.js",
   "scripts": {
     "build": "rollup -c --environment BUILD:production",
@@ -14,6 +14,7 @@
     "dotenv": "^16.0.3",
     "fluent-ffmpeg": "^2.1.2",
     "puppeteer": "^21.0.1",
+    "qrcode-terminal": "^0.12.0",
     "yt-dlp-wrap": "^2.3.11"
   },
   "devDependencies": {
@@ -22,6 +23,7 @@
     "@rollup/plugin-typescript": "^11.1.2",
     "@types/fluent-ffmpeg": "^2.1.21",
     "@types/node": "^18.15.11",
+    "@types/qrcode-terminal": "^0.12.2",
     "rollup": "^3.27.2",
     "rollup-plugin-node-externals": "^6.1.1",
     "typescript": "^5.0.4"

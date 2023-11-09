@@ -3,6 +3,7 @@ import path from "path";
 import { CONFIG_PATH, OUTPUT_DIR } from "../constant";
 import { logger } from "./logger";
 import { IChangedInfo } from "../listening";
+import ffmpeg from "fluent-ffmpeg";
 
 export const mkdir = (dirPath: string) => {
     const dir = path.resolve(OUTPUT_DIR, `./${dirPath}`);
@@ -35,4 +36,17 @@ export const setConfigFile = async (changedInfo: IChangedInfo, platform: "BZ") =
 
     fs.writeFileSync(CONFIG_PATH, JSON.stringify(config), "utf-8");
     logger.info("配置文件更新成功");
+};
+
+export const getImageSize = (imagePath: string): Promise<{ width: number, height: number }> => {
+    return new Promise((resolve, reject) => {
+        ffmpeg.ffprobe(imagePath, function (err, metadata) {
+            if (err) {
+                reject(err);
+            } else {
+                const {width, height} = metadata.streams[0] as { width: number, height: number };
+                resolve({width, height});
+            }
+        });
+    });
 };

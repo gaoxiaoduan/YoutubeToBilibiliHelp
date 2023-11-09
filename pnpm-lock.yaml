@@ -23,6 +23,9 @@ dependencies:
   puppeteer:
     specifier: ^21.0.1
     version: 21.0.1
+  qrcode-terminal:
+    specifier: ^0.12.0
+    version: 0.12.0
   yt-dlp-wrap:
     specifier: ^2.3.11
     version: 2.3.11
@@ -43,6 +46,9 @@ devDependencies:
   '@types/node':
     specifier: ^18.15.11
     version: 18.15.11
+  '@types/qrcode-terminal':
+    specifier: ^0.12.2
+    version: 0.12.2
   rollup:
     specifier: ^3.27.2
     version: 3.27.2
@@ -209,6 +215,10 @@ packages:
 
   /@types/node@18.15.11:
     resolution: { integrity: sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q== }
+
+  /@types/qrcode-terminal@0.12.2:
+    resolution: { integrity: sha512-v+RcIEJ+Uhd6ygSQ0u5YYY7ZM+la7GgPbs0V/7l/kFs2uO4S8BcIUEMoP7za4DNIqNnUD5npf0A/7kBhrCKG5Q== }
+    dev: true
 
   /@types/resolve@1.20.2:
     resolution: { integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q== }
@@ -1002,6 +1012,11 @@ packages:
       - encoding
       - supports-color
       - utf-8-validate
+    dev: false
+
+  /qrcode-terminal@0.12.0:
+    resolution: { integrity: sha512-EXtzRZmC+YGmGlDFbXKxQiMZNwCLEO6BANKXG4iCtSIM0yqc/pappSx3RIKr4r0uh5JsBckOXeKrB3Iz7mdQpQ== }
+    hasBin: true
     dev: false
 
   /queue-tick@1.0.1:

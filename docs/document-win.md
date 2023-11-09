@@ -67,12 +67,9 @@ export PUPPETEER_SKIP_DOWNLOAD='true' #linux下使用
 - 注意：需要删除template后缀使用
 
 
-1. `.dev`配置文件，主要是配置一些账号密码
+1. `.dev`配置文件，主要是配置解决验证码平台的账号密码
 
 ```bash
-BliBli_USERNAME="xxx" # B站用户名
-BliBli_PASSWORD="xxx" # B站密码
-
 # 平台链接：http://www.ttshitu.com/
 # 用处：过平台的二次验证
 TJ_USERNAME="xxx" #打码平台账号
