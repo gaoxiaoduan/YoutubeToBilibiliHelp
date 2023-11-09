@@ -2,8 +2,9 @@
   "version": "1.0.2",
   "module": "./dist/index.js",
   "scripts": {
-    "build": "rollup -c --environment BUILD:production",
-    "build:dev": "rollup -c --environment BUILD:development",
+    "build:rollup": "rollup -c --configPlugin @rollup/plugin-typescript",
+    "build": "npm run build:rollup -- --environment BUILD:production",
+    "build:dev": "npm run build:rollup -- --environment BUILD:development",
     "dev": "npm run build:dev && node ./dist/index.js"
   },
   "type": "module",
