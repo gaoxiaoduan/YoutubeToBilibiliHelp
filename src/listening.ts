@@ -1,5 +1,5 @@
 import { delay, getConfigFile, getPlaylistEnd, logger } from "./utils";
-import { TASK_INTERVAL } from "./constant";
+import { CHECK_CHANGE_INTERVAL, TASK_INTERVAL } from "./constant";
 import { configChannel } from "./common";
 
 export interface IChangedInfo extends uploadConfigType.Channel {
@@ -19,7 +19,7 @@ const checkChange = async () => {
     for (const channelItem of config?.uploads || []) {
         let playlistEndInfo: string;
         try {
-            await delay(1000 * 10);
+            await delay(CHECK_CHANGE_INTERVAL);
             playlistEndInfo = await getPlaylistEnd(channelItem.user_url);
             if (playlistEndInfo === "") {
                 logger.error(`最新视频信息获取失败：${channelItem.user_url}`);

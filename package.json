@@ -1,5 +1,5 @@
 {
-  "version": "1.0.2",
+  "version": "1.0.3",
   "module": "./dist/index.js",
   "scripts": {
     "build:rollup": "rollup -c --configPlugin @rollup/plugin-typescript",
@@ -9,7 +9,7 @@
   },
   "type": "module",
   "dependencies": {
-    "axios": "^1.4.0",
+    "axios": "^1.6.4",
     "bing-translate-api": "^2.9.0",
     "chalk": "4.x",
     "dotenv": "^16.0.3",
