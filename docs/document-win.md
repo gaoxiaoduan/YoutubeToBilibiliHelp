@@ -191,14 +191,6 @@ pm2 stop pm2.config.json # 停止项目
 
 ## 可能会遇到的问题：
 
-关于代理：
-
-```typescript
-// src\constant\index.ts
-// 代理->设置为"",则不走代理｜若直连，可能会被墙，建议给终端走代理，这里默认使用clash本地代理
-export const PROXY = "socks5://127.0.0.1:7890";
-```
-
 - 若报下面的错误，可以将package.json中把puppeteer改为：^18，然后再次pnpm i
 
 ```bash

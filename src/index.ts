@@ -29,11 +29,10 @@ async function main() {
         } catch (e) {
             logger.error("main:捕获到错误->", e);
             logger.info(`main:捕获到错误->${TASK_INTERVAL / 1000}s后重新开启监听`);
+        } finally {
+            setTimeout(main, TASK_INTERVAL);
         }
-        setTimeout(main, TASK_INTERVAL);
     }
 }
 
 main();
-
-

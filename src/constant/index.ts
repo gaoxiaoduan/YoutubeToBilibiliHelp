@@ -4,7 +4,9 @@ export const isDev = process.env.BUILD === "development"; // 开发环境
 
 export const PROXY = "socks5://127.0.0.1:7890"; // 代理->设置为"",则不走代理｜若直连，可能会被墙，建议给终端走代理，这里默认使用clash本地代理
 
-export const TASK_INTERVAL = isDev ? (1000 * 300) : (1000 * 60 * 10); // 监听频率 10分钟
+export const TASK_INTERVAL = isDev ? (1000 * 60) : (1000 * 60 * 10); // 监听频率 10分钟
+
+export const CHECK_CHANGE_INTERVAL = isDev ? (1000 * 2) : (1000 * 20); // 获取频道信息频率配置 20秒
 
 export const waitForSelectorTimeout = 1000 * 60 * 60 * 2; // 等待上传时间
 
